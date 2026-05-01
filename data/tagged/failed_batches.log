@@ -1,0 +1,37 @@
+2026-04-28 17:35:21	batch_001	batch_001 失败：返回条数不匹配，期望 80 条，实际 81 条
+2026-04-28 17:36:50	batch_001	batch_001 失败：domains 为空或非法
+2026-04-28 17:40:06	batch_001	batch_001 失败：网络错误: [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1081)
+2026-04-28 22:26:38	batch_003	batch_003 失败：返回条数不匹配，期望 80 条，实际 78 条
+2026-04-28 22:27:28	batch_005	batch_005 失败：domains 为空或非法
+2026-04-28 22:28:15	batch_006	batch_006 失败：返回条数不匹配，期望 80 条，实际 79 条
+2026-04-28 22:29:02	batch_007	batch_007 失败：返回条数不匹配，期望 80 条，实际 79 条
+2026-04-28 22:33:09	batch_011	batch_011 失败：domains 为空或非法
+2026-04-28 22:33:44	batch_012	batch_012 失败：返回条数不匹配，期望 80 条，实际 55 条
+2026-04-28 22:35:21	batch_015	batch_015 失败：返回条数不匹配，期望 80 条，实际 78 条
+2026-04-28 22:37:06	batch_019	batch_019 失败：domains 为空或非法
+2026-04-28 22:44:18	batch_023	batch_023 失败：返回条数不匹配，期望 80 条，实际 77 条
+2026-04-28 22:53:32	batch_024	batch_024 失败：IncompleteRead(61429 bytes read)
+2026-04-28 23:01:33	batch_025	batch_025 失败：模型返回内容不是合法 JSON 数组
+2026-04-28 23:04:18	batch_003	batch_003 失败：domains 为空或非法
+2026-04-28 23:05:17	batch_006	batch_006 失败：模型返回内容不是合法 JSON 数组
+2026-04-28 23:06:02	batch_007	batch_007 失败：返回条数不匹配，期望 80 条，实际 78 条
+2026-04-28 23:11:22	batch_012	batch_012 失败：返回条数不匹配，期望 80 条，实际 78 条
+2026-04-28 23:12:13	batch_015	batch_015 失败：返回条数不匹配，期望 80 条，实际 78 条
+2026-04-28 23:13:01	batch_019	batch_019 失败：domains 为空或非法
+2026-04-28 23:20:59	batch_024	batch_024 失败：Expecting value: line 543 column 1 (char 2981)
+2026-04-28 23:27:26	batch_025	batch_025 失败：模型返回内容不是合法 JSON 数组
+2026-04-29 09:31:44	pending_batch_004	pending_batch_004 失败：模型返回内容不是合法 JSON 数组
+2026-04-29 10:36:34	pending_batch_004	pending_batch_004 失败：IncompleteRead(1342 bytes read)
+2026-04-29 10:44:59	pending_batch_013	pending_batch_013 失败：模型返回内容不是合法 JSON 数组
+2026-04-29 10:45:11	pending_batch_014	pending_batch_014 失败：模型返回内容不是合法 JSON 数组
+2026-04-29 13:50:22	pending_batch_021	pending_batch_021 失败：返回条数不匹配，期望 40 条，实际 39 条
+2026-04-29 14:00:05	pending_batch_028	pending_batch_028 失败：模型返回内容不是合法 JSON 数组
+2026-04-29 14:03:34	pending_batch_033	pending_batch_033 失败：返回条数不匹配，期望 40 条，实际 39 条
+2026-04-30 04:08:44	pending_20_batch_332	pending_20_batch_332#split2#split2#split1#split2 失败：模型返回内容不是合法 JSON 数组
+2026-04-30 04:16:29	pending_20_batch_350	pending_20_batch_350#split2#split2#split3 失败：模型返回内容不是合法 JSON 数组
+2026-04-30 04:23:16	pending_20_batch_363	pending_20_batch_363#split1#split2#split2#split1 失败：模型返回内容不是合法 JSON 数组
+2026-04-30 04:29:27	pending_20_batch_371	pending_20_batch_371#split1#split1#split1#split2 失败：模型返回内容不是合法 JSON 数组
+2026-04-30 04:56:32	pending_20_batch_390	pending_20_batch_390#split2#split2#split1#split1 失败：'NoneType' object has no attribute 'strip'
+2026-04-30 05:20:38	pending_20_batch_371	pending_20_batch_371#split1#split1#split1#split2 失败：模型返回内容不是合法 JSON 数组
+2026-04-30 05:23:28	pending_20_batch_350	pending_20_batch_350#split2#split2#split3 失败：模型返回内容不是合法 JSON 数组
+2026-04-30 05:29:05	pending_20_batch_390	pending_20_batch_390#split2#split2#split1#split2 失败：模型返回内容不是合法 JSON 数组

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HYMY 知识星球抓取台</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="hero">
+        <p class="eyebrow">HYMY Local Tool</p>
+        <h1>知识星球正文采集工具</h1>
+        <p class="lead">它会记住你上次用的星球、鉴权和抓取方式。默认只补新正文，不碰图片，不重复抓旧内容。</p>
+        <div class="hero-notes">
+          <article>
+            <span>默认怎么抓</span>
+            <strong>从你现有数据的最后一天往后补</strong>
+          </article>
+          <article>
+            <span>一次抓多少</span>
+            <strong>每页固定 30 条，单次默认最多新增 50 条</strong>
+          </article>
+          <article>
+            <span>抓完做什么</span>
+            <strong>默认自动清洗并导出 JSON 到 `output/`</strong>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>这次怎么抓</h2>
+        <p class="panel-lead">先选抓取方式，再决定单次上限。你不改的话，就按最稳的默认值执行。</p>
+
+        <div class="grid">
+          <div>
+            <label>抓取方式</label>
+            <select id="crawlMode">
+              <option value="after_baseline">只补你现有数据之后的新内容</option>
+              <option value="time_window">只抓某个时间段里的内容</option>
+              <option value="full_history">继续往更早的旧内容回填</option>
+            </select>
+          </div>
+          <div>
+            <label>这次最多新增多少条</label>
+            <input id="maxNewTopicsPerRun" type="number" min="1" value="50" />
+          </div>
+        </div>
+
+        <div class="grid">
+          <div>
+            <label>开始时间</label>
+            <input id="windowStartTime" placeholder="例如 2024-12-01 或 2024-12-01 08:00" />
+          </div>
+          <div>
+            <label>结束时间</label>
+            <input id="windowEndTime" placeholder="例如 2025-01-01 或 2025-01-01 00:00" />
+          </div>
+        </div>
+
+        <div class="grid">
+          <div>
+            <label>抓完后自动整理输出</label>
+            <select id="autoExport">
+              <option value="true">开</option>
+              <option value="false">关</option>
+            </select>
+          </div>
+          <div></div>
+        </div>
+
+        <div class="divider"></div>
+
+        <h2>连接信息</h2>
+        <p class="panel-lead">这些信息会保存在本机，下次打开页面会自动带回来。</p>
+
+        <label>鉴权字符串</label>
+        <textarea id="authorization" rows="3" placeholder="粘贴知识星球请求头里的 Authorization"></textarea>
+
+        <label>浏览器标识</label>
+        <textarea id="userAgent" rows="2" placeholder="粘贴你浏览器当前请求的 User-Agent"></textarea>
+
+        <div class="grid">
+          <div>
+            <label>星球 ID</label>
+            <input id="groupId" placeholder="例如 48412145525258" />
+          </div>
+          <div>
+            <label>抓哪些正文</label>
+            <input id="scope" value="" placeholder="留空表示抓全部；只有你确定需要精华流时才填 digests" />
+          </div>
+        </div>
+
+        <label>完整接口地址（可选）</label>
+        <input id="topicsUrl" placeholder="如果你已经抓到了 topics 接口，直接贴这里就行" />
+
+        <div class="actions">
+          <button id="saveConfig">保存配置</button>
+          <button id="testConnection" class="ghost">测试连接</button>
+          <button id="startCrawl" class="accent">开始 / 继续抓取</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>现在会怎么执行</h2>
+        <p class="panel-lead">这里不是程序日志，而是给你看的执行摘要。</p>
+        <p class="panel-lead">每抓完一页，程序会随机休息 20 到 90 秒再继续，避免请求太密。</p>
+        <div class="status-grid">
+          <article><span>当前状态</span><strong id="phase">-</strong></article>
+          <article><span>程序正在做什么</span><strong id="phaseDetail">-</strong></article>
+          <article><span>你最初的数据截止到哪</span><strong id="baselineTime">-</strong></article>
+          <article><span>这轮任务当前已经推进到哪</span><strong id="progressTime">-</strong></article>
+          <article><span>当前这一页装的内容时间范围</span><strong id="currentPageRange">-</strong></article>
+          <article><span>这次按什么方式抓</span><strong id="runMode">-</strong></article>
+          <article><span>这次最多抓多少条</span><strong id="runLimit">-</strong></article>
+          <article><span>这次已经拿到多少条</span><strong id="runGot">0</strong></article>
+        </div>
+        <div class="notes">
+          <p>原始正文会写到 <code>data/raw/topics.jsonl</code>。</p>
+          <p>整理后的 JSON 会写到 <code>output/</code>。</p>
+          <p>你填过的鉴权、星球 ID 和抓取选项会保存在 <code>data/config.json</code>，下次自动沿用。</p>
+        </div>
+      </section>
+    </main>
+
+    <script src="/static/app.js"></script>
+  </body>
+  </html>

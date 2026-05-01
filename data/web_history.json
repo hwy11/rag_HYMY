@@ -1,0 +1,20 @@
+[
+  {
+    "timestamp": "2026-04-27 17:34:01",
+    "question": "我现在应该先修身体还是先搞钱？",
+    "context": "2026年4月，我刚离职，现金流只能撑6个月。",
+    "persona_level": "standard",
+    "top_k": 8,
+    "token_estimate": 437,
+    "domains": [
+      "职业",
+      "教育"
+    ],
+    "quote_types": [
+      "方法论"
+    ],
+    "time_sensitivities": [
+      "中期"
+    ]
+  }
+]

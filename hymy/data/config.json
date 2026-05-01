@@ -1,0 +1,12 @@
+{
+  "authorization": "3AF3E19B-AC2E-48A5-A027-60578B994297_8D5DAFAE7CB0AE67",
+  "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36",
+  "group_id": "48412145525258",
+  "topics_url": "",
+  "scope": "",
+  "crawl_mode": "after_baseline",
+  "window_start_time": "",
+  "window_end_time": "",
+  "max_new_topics_per_run": 100,
+  "auto_export": false
+}

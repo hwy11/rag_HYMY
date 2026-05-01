@@ -1,0 +1,21 @@
+{
+  "baseline_time": "2025-11-30 16:49",
+  "progress_time": "2026-04-28 15:42",
+  "current_page_range": "2026-04-27 09:14 到 2026-04-28 15:40",
+  "run_mode": "after_baseline",
+  "run_limit": 100,
+  "run_got": 63,
+  "phase": "done",
+  "phase_detail": "本次新增 63 条正文",
+  "_internal": {
+    "history_complete": true,
+    "last_run_at": "2026-04-28T07:42:02Z",
+    "last_success_at": "2026-04-28T07:47:18Z",
+    "latest_topic_id": "55522114148584244",
+    "latest_topic_time": "2026-04-28T15:40:59.484+0800",
+    "export_summary": {},
+    "pages_scanned": 8,
+    "last_page_new_topics": 4,
+    "last_error": ""
+  }
+}
