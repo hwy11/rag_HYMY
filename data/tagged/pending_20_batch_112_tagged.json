@@ -1,0 +1,258 @@
+[
+  {
+    "id": "processed_data_3-2021",
+    "source_id": "2021",
+    "date": "2025-05-28",
+    "type_origin": "reply",
+    "source_question": "幻哥，如何评价带师的“规则”",
+    "content": "这种想都不用想就骗子",
+    "domains": [
+      "搞钱"
+    ],
+    "type": "事实陈述/推测预测"
+  },
+  {
+    "id": "processed_data_3-2022",
+    "source_id": "2022",
+    "date": "2025-05-28",
+    "type_origin": "original_post",
+    "source_question": "",
+    "content": "你们在干嘛呢[呲牙]",
+    "domains": [
+      "人际"
+    ],
+    "type": "事实陈述/推测预测"
+  },
+  {
+    "id": "processed_data_3-2023",
+    "source_id": "2023",
+    "date": "2025-05-27",
+    "type_origin": "reply",
+    "source_question": "幻幻，我是个小颜值健身博主，我用小米12sPro在寝室抖音直播，一直被说前置画面太糊不清晰（之前因为这个又买了一个二手小米12sPro，还是被说很糊），网络换WiFi和流量都没改善，是不是该考虑买一个苹果手机，比如二手苹果13，14什么的，专门拿来直播用？",
+    "content": "直播好像都是用苹果",
+    "domains": [
+      "内容创作",
+      "消费"
+    ],
+    "type": "事实陈述/推测预测"
+  },
+  {
+    "id": "processed_data_3-2024",
+    "source_id": "2024",
+    "date": "2025-05-27",
+    "type_origin": "reply",
+    "source_question": "嬛嬛 心态不好特别容易焦虑咋办\n从小到大每次大考小考前都巨焦虑，自媒体更新内容前也会疯狂焦虑数据。\n现在要糕烤了也会控制不住地焦虑 躯体化严重 心脏疼呼吸不过来 动弹不了只能扣字\n知道高考没啥用了但焦虑真的控制不住🥺🥺\n常年服用镇静药所以不敢再乱吃药了，锻炼完也好焦虑好焦虑，怎么办呀🥺🥺",
+    "content": "高考前还有考试吧 你就直接考个0分 7个0[呲牙]",
+    "domains": [
+      "教育",
+      "健康",
+      "内容创作"
+    ],
+    "type": "方法论"
+  },
+  {
+    "id": "processed_data_3-2025",
+    "source_id": "2025",
+    "date": "2025-05-27",
+    "type_origin": "reply",
+    "source_question": "幻哥，电信政企客户经理和人保财险核保岗位选哪个好，都是校招进去的正式工，也都是家里边的，比较近\n\n电信这个据说压力比较大，然后家里边有个亲戚在里面做普通职工，另外有个亲戚给我画大饼说自己认识电信里的高管啥的，不知道可不可信\n人保财险这个还没签，也是画饼说工作相对轻松，工资一般，我跟他说我签了电信的，他说电信那个岗很忙，不太好，他们那个是坐办公室的\n\n现在不知道怎么选，电信这周内得签三方，不知道能不能拖，而人保那边只是口头给offer，还多次打电话劝我去，offer下来要两周，让我先去实习，签实习合同\n不知道这种实习的有没有坑，目前手头就电信是稳的，假如放弃了，又被人保那边鸽了，就完蛋了\n请幻哥给点建议",
+    "content": "人保肯定好一点啊 工资发下来直接买你们公司 挣两份钱[呲牙]",
+    "domains": [
+      "职业",
+      "决策",
+      "投资"
+    ],
+    "type": "方法论"
+  },
+  {
+    "id": "processed_data_3-2026",
+    "source_id": "2026",
+    "date": "2025-05-27",
+    "type_origin": "reply",
+    "source_question": "哥哥 感觉自己越来越贪了 以前一天500都高兴好久 现在1k都觉得少 没有安全感（不是陪睡）",
+    "content": "本来就少啊 你以为自己有几年挣钱",
+    "domains": [
+      "搞钱",
+      "情绪"
+    ],
+    "type": "事实陈述/推测预测"
+  },
+  {
+    "id": "processed_data_3-2027",
+    "source_id": "2027",
+    "date": "2025-05-27",
+    "type_origin": "original_post",
+    "source_question": "",
+    "content": "古语有云，京片子，卫嘴子，保定府的＿＿[呲牙]",
+    "domains": [
+      "认知"
+    ],
+    "type": "思维方式"
+  },
+  {
+    "id": "processed_data_3-2028",
+    "source_id": "2028",
+    "date": "2025-05-27",
+    "type_origin": "original_post",
+    "source_question": "",
+    "content": "星球里谁？[呲牙]",
+    "domains": [
+      "内容创作",
+      "人际"
+    ],
+    "type": "事实陈述/推测预测"
+  },
+  {
+    "id": "processed_data_3-2029",
+    "source_id": "2029",
+    "date": "2025-05-26",
+    "type_origin": "reply",
+    "source_question": "请问幻哥为什么讲话最后一个字带“捏”的人是贱种，是因为觉得他很得意洋洋吗",
+    "content": "bili含量高的能是正常人类吗？[呲牙]",
+    "domains": [
+      "人际"
+    ],
+    "type": "事实陈述/推测预测"
+  },
+  {
+    "id": "processed_data_3-2030",
+    "source_id": "2030",
+    "date": "2025-05-26",
+    "type_origin": "reply",
+    "source_question": "有点恐怖啊嬛嬛，抖音有人解读甄嬛和皇上红帐白衣是再娶亡妻的意思，就是说甄嬛是死掉的纯元👻",
+    "content": "哪又怎么样 谁规定死人就一定穿白衣 我天天穿我咋没死? 都是⏰自己意淫的东西[呲牙]",
+    "domains": [
+      "内容创作"
+    ],
+    "type": "方法论"
+  },
+  {
+    "id": "processed_data_3-2031",
+    "source_id": "2031",
+    "date": "2025-05-26",
+    "type_origin": "original_post",
+    "source_question": "",
+    "content": "讲话最后带个捏的，想都不要想就知道是贱种，没有必要继续交流了，一刀捅死你🐎就完事了[呲牙]",
+    "domains": [
+      "人际"
+    ],
+    "type": "价值观"
+  },
+  {
+    "id": "processed_data_3-2032",
+    "source_id": "2032",
+    "date": "2025-05-26",
+    "type_origin": "reply",
+    "source_question": "上班的男生跟上大学的女生谈恋爱 出去的开销怎么算 女生应该问男生要礼物和零花钱吗",
+    "content": "哥哥现在已经想通了 \n只要不是女人主动掏钱 说明她不是真爱你 你俩就是各取所需搭伙过日子 不要入戏太深[呲牙]",
+    "domains": [
+      "两性",
+      "职业",
+      "教育"
+    ],
+    "type": "思维方式"
+  },
+  {
+    "id": "processed_data_3-2033",
+    "source_id": "2033",
+    "date": "2025-05-26",
+    "type_origin": "reply",
+    "source_question": "幻哥可以放出来吗，想问问星球里的姐妹，穿什么内衣可以预防胸部下垂，运动内衣可以吗，还是要带钢圈的那种",
+    "content": "感觉是伪命题 女人老了自然就会下垂",
+    "domains": [
+      "健康",
+      "两性",
+      "内容创作"
+    ],
+    "type": "思维方式"
+  },
+  {
+    "id": "processed_data_3-2034",
+    "source_id": "2034",
+    "date": "2025-05-26",
+    "type_origin": "reply",
+    "source_question": "哥，做抖音一开始想不到赛道瞎做，可以结合作品的流量和自己情况来把赛道筛出来吗",
+    "content": "除非你是天才 不然还是老老实实先找赛道",
+    "domains": [
+      "内容创作",
+      "决策"
+    ],
+    "type": "方法论"
+  },
+  {
+    "id": "processed_data_3-2035",
+    "source_id": "2035",
+    "date": "2025-05-26",
+    "type_origin": "reply",
+    "source_question": "母单想正常谈一次恋爱不想碰到yp的线上有途径吗求问，还是说这个纯看缘分的",
+    "content": "多参加活动 坐寝室哪里有缘分",
+    "domains": [
+      "两性",
+      "人际"
+    ],
+    "type": "思维方式"
+  },
+  {
+    "id": "processed_data_3-2037",
+    "source_id": "2037",
+    "date": "2025-05-26",
+    "type_origin": "reply",
+    "source_question": "幻幻，如果只是考虑医疗的话，上海户口的医疗报销用处大吗？还是说也就那样",
+    "content": "只看医疗你去长沙都行 湘雅旁边有个大平层 两万三到两万五一平 更不要说破烂房子了",
+    "domains": [
+      "健康",
+      "消费"
+    ],
+    "type": "故事案例"
+  },
+  {
+    "id": "processed_data_3-2038",
+    "source_id": "2038",
+    "date": "2025-05-26",
+    "type_origin": "original_post",
+    "source_question": "",
+    "content": "现在就是房价太便宜了，随便一个餐馆洗盘子的都能租到房，以后必然就是复刻白👻经验，用β换房[呲牙]",
+    "domains": [
+      "消费",
+      "投资"
+    ],
+    "type": "事实陈述/推测预测"
+  },
+  {
+    "id": "processed_data_3-2039",
+    "source_id": "2039",
+    "date": "2025-05-26",
+    "type_origin": "original_post",
+    "source_question": "",
+    "content": "应该是假的，假新闻[呲牙]",
+    "domains": [
+      "社会观察"
+    ],
+    "type": "事实陈述/推测预测"
+  },
+  {
+    "id": "processed_data_3-2040",
+    "source_id": "2040",
+    "date": "2025-05-26",
+    "type_origin": "reply",
+    "source_question": "哥哥你怎么一天都没说话了，发生什么事了？",
+    "content": "为什么要说 天天给你服务？你配吗[呲牙]",
+    "domains": [
+      "人际",
+      "情绪"
+    ],
+    "type": "事实陈述/推测预测"
+  },
+  {
+    "id": "processed_data_3-2041",
+    "source_id": "2041",
+    "date": "2025-05-26",
+    "type_origin": "original_post",
+    "source_question": "",
+    "content": "在海口热成蛆了[大哭]\n\n海口是海口 三亚是三亚",
+    "domains": [
+      "情绪"
+    ],
+    "type": "事实陈述/推测预测"
+  }
+]

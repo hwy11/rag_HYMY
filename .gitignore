@@ -4,11 +4,13 @@ __pycache__/
 .env
 .DS_Store
 data/raw/*.json
-data/processed/*.jsonl
-data/tagged/*.json
 data/tagging_batches/*
-data/index/*
 !data/raw/example.json
+!data/raw/mock_batch_001.json
+!data/raw/mock_batch_002.json
+!data/processed/*.jsonl
+!data/tagged/*.json
+!data/index/quotes_index.json
 !data/tagged/example_tagged.json
 !data/processed/.gitkeep
 !data/tagging_batches/.gitkeep

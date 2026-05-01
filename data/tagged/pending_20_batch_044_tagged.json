@@ -1,0 +1,256 @@
+[
+  {
+    "id": "processed_data_2-608",
+    "source_id": "608",
+    "date": "2025-08-22",
+    "type_origin": "reply",
+    "source_question": "两个字！五个字！",
+    "content": "真正的 粉丝[流泪]\n精神病人小春妹妹和北风粟掏的出来嘛？不要硬撑噢，不然晚上拼好饭都吃不成了[呲牙]",
+    "domains": [
+      "内容创作",
+      "人际",
+      "情绪"
+    ],
+    "type": "事实陈述/推测预测"
+  },
+  {
+    "id": "processed_data_2-609",
+    "source_id": "609",
+    "date": "2025-08-22",
+    "type_origin": "reply",
+    "source_question": "感恩哥哥",
+    "content": "你也是真粉丝 今天就靠你的钱吃饭了[呲牙]",
+    "domains": [
+      "搞钱",
+      "人际"
+    ],
+    "type": "事实陈述/推测预测"
+  },
+  {
+    "id": "processed_data_2-610",
+    "source_id": "610",
+    "date": "2025-08-22",
+    "type_origin": "original_post",
+    "source_question": "",
+    "content": "怎么被吞了？\n精神病人小春妹妹和北风粟，现在在哪高就呢？[呲牙]",
+    "domains": [
+      "职业",
+      "人际"
+    ],
+    "type": "事实陈述/推测预测"
+  },
+  {
+    "id": "processed_data_2-611",
+    "source_id": "611",
+    "date": "2025-08-22",
+    "type_origin": "reply",
+    "source_question": "幻大，为啥我这个视频不火呢？帮我看一下呗，请您喝奶茶\n\n2.02 复制打开抖音，看看【梨花有点菜的作品】震惊！虚拟女主播竟然木有头发 # 恐怖游戏 # 搞... d@A.TY pdn:/ 10/07",
+    "content": "技术力够了，应该是可以做出更好的视频的\n但是第一封面和标题不行 如果是投到b站 这俩不行根本没人看\n第二开头就应该放精彩片段吸引人 如果是太恐怖的那就打码 但是也不能打死\n第三太拖沓 抖音上的穷傻逼没有耐心看15分钟的 5秒内留不住人就走了 最长也不要超过两分钟 把精彩内容全部堆到2分钟内才有人看\n这些都得学，跟那些大up或者目前比较热的腰部博主学，你水太浅",
+    "domains": [
+      "内容创作"
+    ],
+    "type": "方法论"
+  },
+  {
+    "id": "processed_data_2-612",
+    "source_id": "612",
+    "date": "2025-08-22",
+    "type_origin": "original_post",
+    "source_question": "",
+    "content": "微信里(🐞用)➕的这些婊子都玩无畏契约\n所以哥哥也玩吧，不就穿越火线换个画风嘛谁不会？哥哥小学四年级就玩烂的东西\n先玩他个把月的，不能靠这个免费艹到逼就弃坑[发怒]",
+    "domains": [
+      "人际",
+      "两性"
+    ],
+    "type": "方法论"
+  },
+  {
+    "id": "processed_data_2-613",
+    "source_id": "613",
+    "date": "2025-08-22",
+    "type_origin": "original_post",
+    "source_question": "",
+    "content": "听说星球里全是🐞教程?来个人求证一下是不是真的，真的我就不➕了[呲牙]",
+    "domains": [
+      "学习",
+      "内容创作"
+    ],
+    "type": "事实陈述/推测预测"
+  },
+  {
+    "id": "processed_data_2-614",
+    "source_id": "614",
+    "date": "2025-08-22",
+    "type_origin": "original_post",
+    "source_question": "",
+    "content": "好消息 峰哥现在依然没有梭哈\n你跟峰哥PK一下 看看谁准一点[呲牙]",
+    "domains": [
+      "投资"
+    ],
+    "type": "事实陈述/推测预测"
+  },
+  {
+    "id": "processed_data_2-615",
+    "source_id": "615",
+    "date": "2025-08-22",
+    "type_origin": "original_post",
+    "source_question": "",
+    "content": "收到[OK]\n感谢[抱拳]",
+    "domains": [
+      "人际"
+    ],
+    "type": "事实陈述/推测预测"
+  },
+  {
+    "id": "processed_data_2-616",
+    "source_id": "616",
+    "date": "2025-08-22",
+    "type_origin": "original_post",
+    "source_question": "",
+    "content": "看来哥哥还是有真粉丝的 \n谢谢你 太感动了[流泪]",
+    "domains": [
+      "人际",
+      "情绪"
+    ],
+    "type": "事实陈述/推测预测"
+  },
+  {
+    "id": "processed_data_2-617",
+    "source_id": "617",
+    "date": "2025-08-22",
+    "type_origin": "reply",
+    "source_question": "请哥哥喝咖啡！哈哈哈！！！哥哥边骂边喂饭，我越捡越开心！！",
+    "content": "哎 终于有人给88了 太谢谢你了\n收款码里全是0.1 0.01的穷傻逼 真粉丝太少了 以后还是把星球关了算了[流泪]",
+    "domains": [
+      "搞钱",
+      "人际",
+      "内容创作"
+    ],
+    "type": "事实陈述/推测预测"
+  },
+  {
+    "id": "processed_data_2-618",
+    "source_id": "618",
+    "date": "2025-08-22",
+    "type_origin": "original_post",
+    "source_question": "",
+    "content": "股票杀人了[惊恐]",
+    "domains": [
+      "投资"
+    ],
+    "type": "事实陈述/推测预测"
+  },
+  {
+    "id": "processed_data_2-619",
+    "source_id": "619",
+    "date": "2025-08-22",
+    "type_origin": "reply",
+    "source_question": "请哥哥一杯咖啡，这几天同事都跑过来问我，说自己当年3200，3300后悔没进。现在3800又恐高觉得要等抄底。😂只有我坚定不移地跟着哥哥爱国",
+    "content": "收米了的打赏哥哥一点吧 别人都在赚钱，就哥哥彻底失败了，要崩溃了[流泪]",
+    "domains": [
+      "投资",
+      "搞钱",
+      "情绪"
+    ],
+    "type": "事实陈述/推测预测"
+  },
+  {
+    "id": "processed_data_2-620",
+    "source_id": "620",
+    "date": "2025-08-22",
+    "type_origin": "original_post",
+    "source_question": "",
+    "content": "差点连指数都没跑赢[惊恐]\n哥哥这样的老股民太可怜了[流泪]",
+    "domains": [
+      "投资",
+      "情绪"
+    ],
+    "type": "事实陈述/推测预测"
+  },
+  {
+    "id": "processed_data_2-621",
+    "source_id": "621",
+    "date": "2025-08-22",
+    "type_origin": "original_post",
+    "source_question": "",
+    "content": "前几年星球里有人问过的，说要不要冲一波，因为没付费哥哥就懒得理[呲牙]",
+    "domains": [
+      "搞钱",
+      "内容创作"
+    ],
+    "type": "事实陈述/推测预测"
+  },
+  {
+    "id": "processed_data_2-622",
+    "source_id": "622",
+    "date": "2025-08-22",
+    "type_origin": "original_post",
+    "source_question": "",
+    "content": "上山下?[呲牙]",
+    "domains": [
+      "社会观察"
+    ],
+    "type": "事实陈述/推测预测"
+  },
+  {
+    "id": "processed_data_2-623",
+    "source_id": "623",
+    "date": "2025-08-22",
+    "type_origin": "original_post",
+    "source_question": "",
+    "content": "看冻鳗看多了就知道 \n一般说完这些话就要领盒饭了，看看这回能否得到验证[呲牙]",
+    "domains": [
+      "内容创作"
+    ],
+    "type": "事实陈述/推测预测"
+  },
+  {
+    "id": "processed_data_2-624",
+    "source_id": "624",
+    "date": "2025-08-22",
+    "type_origin": "original_post",
+    "source_question": "",
+    "content": "哥哥很早就发现了\n几乎全世界所有人，上到各大机构金融精英，下到抖音上的财经博主\n都认为🇺🇸要降息，然后就可以各种嗨起来了\n哥哥就觉得挺搞笑的，为什么要降息?谁规定的?搞不好加息呢\n我要是美联储我肯定不降息啊，闹呢，傻逼太多了，我还要加息呢\n当然哥哥目前只是根据自己的直觉和一些不成型的理论瞎猜，9月看看猜对没有，要是猜对了那可要出大事了[呲牙]",
+    "domains": [
+      "投资"
+    ],
+    "type": "事实陈述/推测预测"
+  },
+  {
+    "id": "processed_data_2-625",
+    "source_id": "625",
+    "date": "2025-08-22",
+    "type_origin": "original_post",
+    "source_question": "",
+    "content": "除了要求严格，好像都符合?[呲牙]",
+    "domains": [
+      "认知"
+    ],
+    "type": "事实陈述/推测预测"
+  },
+  {
+    "id": "processed_data_2-626",
+    "source_id": "626",
+    "date": "2025-08-22",
+    "type_origin": "original_post",
+    "source_question": "",
+    "content": "只有累死的🐂，没有耕坏的田[流泪]",
+    "domains": [
+      "两性",
+      "情绪"
+    ],
+    "type": "思维方式"
+  },
+  {
+    "id": "processed_data_2-627",
+    "source_id": "627",
+    "date": "2025-08-22",
+    "type_origin": "original_post",
+    "source_question": "",
+    "content": "哥哥认为，本质是版本变了，2019年前后各是一个版本，什么版本人就说什么话而已，不要以为自己多有思想[呲牙]",
+    "domains": [
+      "认知"
+    ],
+    "type": "思维方式"
+  }
+]

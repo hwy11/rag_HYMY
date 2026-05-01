@@ -1,0 +1,260 @@
+[
+  {
+    "id": "processed_data_2-377",
+    "source_id": "377",
+    "date": "2025-09-05",
+    "type_origin": "reply",
+    "source_question": "幻幻，我替我对象问一下关于药店这个。\n大概情况：对象在店里是店长，老板是亲姐，开了几家店吧，中间也裁人了，收益比之前差的多。对象管的这家店接近于赔本状态了，你说还有干下去的必要吗，\n我自己本身的意愿是跟对象去更好的城市，我刚毕业，但是对象也干这行十几年了，老板又是自己家里人，我怕我的想法不对，耽误对象了，药店现在这个情况，对象也在犹豫",
+    "content": "药店的问题是之前开太多了 现在开始大逃杀 只有血厚的才能活下来 \n所以还有的熬 剩者为王\n关不关的那得看你会什么啊 如果什么都不会那不只能继续混着",
+    "domains": [
+      "职业",
+      "健康",
+      "决策"
+    ],
+    "type": "事实陈述/推测预测"
+  },
+  {
+    "id": "processed_data_2-378",
+    "source_id": "378",
+    "date": "2025-09-05",
+    "type_origin": "reply",
+    "source_question": "哥 刚才投简历刷到的 这种线上的是不是不靠谱 还是说需要各种恶心繁琐的条件",
+    "content": "只要不签合同 不交钱 一般就没事",
+    "domains": [
+      "职业",
+      "决策"
+    ],
+    "type": "方法论"
+  },
+  {
+    "id": "processed_data_2-379",
+    "source_id": "379",
+    "date": "2025-09-05",
+    "type_origin": "original_post",
+    "source_question": "",
+    "content": "哥可以试试安踏，和始祖鸟、迪桑特一个料[呲牙]我都买过，没差别 都一个厂的\n\n算了，既然今天回血了就去看看，贵点就贵点吧[尴尬]",
+    "domains": [
+      "消费"
+    ],
+    "type": "事实陈述/推测预测"
+  },
+  {
+    "id": "processed_data_2-380",
+    "source_id": "380",
+    "date": "2025-09-05",
+    "type_origin": "original_post",
+    "source_question": "",
+    "content": "今年问志愿的时候有人说爹妈让她学医，然后考一个什么证，以后家里用她的证挂靠开药店\n哥哥直接昏倒，告诉她傻逼才开药店，就这么救了她一命，当然也有可能她没听哥哥的，随便[呲牙]",
+    "domains": [
+      "教育",
+      "职业"
+    ],
+    "type": "事实陈述/推测预测"
+  },
+  {
+    "id": "processed_data_2-381",
+    "source_id": "381",
+    "date": "2025-09-05",
+    "type_origin": "original_post",
+    "source_question": "",
+    "content": "所有的⏰都不看好你 只有哥哥把你当宝贝[流泪]",
+    "domains": [
+      "人际",
+      "情绪"
+    ],
+    "type": "事实陈述/推测预测"
+  },
+  {
+    "id": "processed_data_2-382",
+    "source_id": "382",
+    "date": "2025-09-05",
+    "type_origin": "original_post",
+    "source_question": "",
+    "content": "哥哥早就说过了，太多⏰男没有看穿本质，把🐔娶回家了，所以活该倒霉[呲牙]",
+    "domains": [
+      "两性",
+      "价值观",
+      "认知"
+    ],
+    "type": "思维方式"
+  },
+  {
+    "id": "processed_data_2-383",
+    "source_id": "383",
+    "date": "2025-09-05",
+    "type_origin": "original_post",
+    "source_question": "",
+    "content": "小峰看样子还没进 得抓紧时间了[呲牙]",
+    "domains": [
+      "内容创作"
+    ],
+    "type": "事实陈述/推测预测"
+  },
+  {
+    "id": "processed_data_2-384",
+    "source_id": "384",
+    "date": "2025-09-05",
+    "type_origin": "original_post",
+    "source_question": "",
+    "content": "好起来了\n昨天还亏两万多的，今天只亏7000了，国家太伟大了[呲牙]",
+    "domains": [
+      "投资"
+    ],
+    "type": "事实陈述/推测预测"
+  },
+  {
+    "id": "processed_data_2-385",
+    "source_id": "385",
+    "date": "2025-09-05",
+    "type_origin": "original_post",
+    "source_question": "",
+    "content": "哥哥已经想好了，如果是个废物就当宠物养着也挺好，当然得做家务\n如果聪明的就重点培养，不要明明都是个废物了还要砸钱，那不傻逼嘛，老登里傻逼太多了[呲牙]",
+    "domains": [
+      "教育",
+      "价值观"
+    ],
+    "type": "价值观"
+  },
+  {
+    "id": "processed_data_2-386",
+    "source_id": "386",
+    "date": "2025-09-05",
+    "type_origin": "original_post",
+    "source_question": "",
+    "content": "哥哥这些年逐渐接触到一些80后的家长\n我本来以为这些人会比👴👵更开明，没想到反而更魔怔了\n而且这些人相比6070后的家长，除了传统的打骂PUA以外，还更会用现代技术手段来控制小逼仔\n只要不合她意了，就直接送精神病院，比如不想上学，就送精神病院\n这其实挺恐怖的，如果你打不过他们的话，那可就遭老罪了\n哥哥想了想，原因可能是这些人高考都是在20年前，那会读书还是有用的，所以他们也魔怔了\n但是现在轮到咱们95后当家长了，那真不好说了，总之教培且赚且珍惜[呲牙]",
+    "domains": [
+      "教育"
+    ],
+    "type": "事实陈述/推测预测"
+  },
+  {
+    "id": "processed_data_2-387",
+    "source_id": "387",
+    "date": "2025-09-05",
+    "type_origin": "reply",
+    "source_question": "哥哥 那教培有什么注意的莫 我觉得哥哥推荐的应该是走机构那种的教培 我看📕教我从boss上报名啥的 我的能力依我看应该是能教小学和初中文科方面的\n\n然后币的话我会听你的研究搞点免费的放在那 我记得哥哥好像说过以后会提一嘴 到时再研究下一步咋搞吧hhh\n\n脑子笨怕踩坑走一步我都想问一下哥哥",
+    "content": "没什么注意的吧 有能力的过段时间都会自己单干 你没能力就混工资呗 穷打工的能有什么前途\n而且这行也没几年了 傻逼家长们醒过味来 就不折腾了 能赚一点是一点吧",
+    "domains": [
+      "职业",
+      "教育",
+      "搞钱"
+    ],
+    "type": "方法论"
+  },
+  {
+    "id": "processed_data_2-388",
+    "source_id": "388",
+    "date": "2025-09-05",
+    "type_origin": "reply",
+    "source_question": "哥，我是师范专业，今年毕业考公考编没上岸，目前打算全职再考一年，边备考边尝试做自媒体。\n现在突然有亲戚介绍工作，跨境电商运营（听起来不轻松，不知道有没有时间备考）工资四千有提成，要去另一个城市，怕花的比赚的多，而且因为亲戚介绍，怕跑路不好跑\n请哥哥给一点建议，要不要去呢",
+    "content": "不说学校就是臭双非嘛 考不上本来智商就不行了 还打算一边做自媒体 那不就显得你那智商更不可能考上了\n所以你还是算了 能给你个活干就不错了",
+    "domains": [
+      "教育",
+      "职业",
+      "决策"
+    ],
+    "type": "方法论"
+  },
+  {
+    "id": "processed_data_2-389",
+    "source_id": "389",
+    "date": "2025-09-05",
+    "type_origin": "original_post",
+    "source_question": "",
+    "content": "哥哥现实中就这样，网上都是演给你们看的[流泪]",
+    "domains": [
+      "内容创作",
+      "认知",
+      "情绪"
+    ],
+    "type": "思维方式"
+  },
+  {
+    "id": "processed_data_2-390",
+    "source_id": "390",
+    "date": "2025-09-05",
+    "type_origin": "reply",
+    "source_question": "幻幻，大四女，能保西北农林科技大学的翻硕，要保吗？去国企的话会被卡出985行列吗",
+    "content": "这种边角料学校都是体制内认体制外不认 所以应该不会",
+    "domains": [
+      "教育",
+      "职业",
+      "决策"
+    ],
+    "type": "事实陈述/推测预测"
+  },
+  {
+    "id": "processed_data_2-391",
+    "source_id": "391",
+    "date": "2025-09-05",
+    "type_origin": "original_post",
+    "source_question": "",
+    "content": "领导比家长们看的远，读书早就屁用没有了，一帮穷傻逼们还在做梦呢[呲牙]",
+    "domains": [
+      "教育",
+      "认知",
+      "价值观"
+    ],
+    "type": "思维方式"
+  },
+  {
+    "id": "processed_data_2-392",
+    "source_id": "392",
+    "date": "2025-09-05",
+    "type_origin": "original_post",
+    "source_question": "",
+    "content": "哥哥直接领先十年[呲牙]",
+    "domains": [
+      "认知"
+    ],
+    "type": "方法论"
+  },
+  {
+    "id": "processed_data_2-393",
+    "source_id": "393",
+    "date": "2025-09-04",
+    "type_origin": "original_post",
+    "source_question": "",
+    "content": "看了一下最冷也就这样嘛 晚上不出门就行了 穿那么贵的干🐔巴 能省就省 冬天我去海南的，这么贵的衣服用不到[发怒]",
+    "domains": [
+      "消费"
+    ],
+    "type": "事实陈述/推测预测"
+  },
+  {
+    "id": "processed_data_2-394",
+    "source_id": "394",
+    "date": "2025-09-04",
+    "type_origin": "original_post",
+    "source_question": "",
+    "content": "听说西藏现在冷了，打算买个冲锋衣\n去优衣库和迪卡侬看了，399起步，波司登啥的更是上千了，什么破布凭什么这么贵\n我心想你🐎戈壁，直接打开美团闪购，80块钱搞定，我感觉也挺不错[呲牙]",
+    "domains": [
+      "消费"
+    ],
+    "type": "事实陈述/推测预测"
+  },
+  {
+    "id": "processed_data_2-395",
+    "source_id": "395",
+    "date": "2025-09-04",
+    "type_origin": "original_post",
+    "source_question": "",
+    "content": "打卡了成都两个夜市\n建设路太网红了，都是烂大街的东西，没有专门去的必要\n抚琴稍微好一点，烟火气足一点，可以逛一逛但是也不要有太高期待",
+    "domains": [
+      "消费"
+    ],
+    "type": "事实陈述/推测预测"
+  },
+  {
+    "id": "processed_data_2-396",
+    "source_id": "396",
+    "date": "2025-09-04",
+    "type_origin": "original_post",
+    "source_question": "",
+    "content": "小峰减仓了，如何解读[呲牙]",
+    "domains": [
+      "投资"
+    ],
+    "type": "事实陈述/推测预测"
+  }
+]

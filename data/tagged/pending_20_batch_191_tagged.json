@@ -1,0 +1,251 @@
+[
+  {
+    "id": "processed_data_5-1154",
+    "source_id": "1154",
+    "date": "2025-01-15",
+    "type_origin": "original_post",
+    "source_question": "",
+    "content": "女儿倒霉了[睡]",
+    "domains": [
+      "情绪"
+    ],
+    "type": "事实陈述/推测预测"
+  },
+  {
+    "id": "processed_data_5-1155",
+    "source_id": "1155",
+    "date": "2025-01-15",
+    "type_origin": "reply",
+    "source_question": "666",
+    "content": "这个倒也没什么 你是女的你会跟你处对象吗[睡]",
+    "domains": [
+      "两性"
+    ],
+    "type": "事实陈述/推测预测"
+  },
+  {
+    "id": "processed_data_5-1156",
+    "source_id": "1156",
+    "date": "2025-01-15",
+    "type_origin": "original_post",
+    "source_question": "",
+    "content": "完了 川宝再不出来管事 小🇰🇷要[睡]了 技术要全部被偷走了[睡]",
+    "domains": [
+      "社会观察"
+    ],
+    "type": "方法论"
+  },
+  {
+    "id": "processed_data_5-1157",
+    "source_id": "1157",
+    "date": "2025-01-15",
+    "type_origin": "original_post",
+    "source_question": "",
+    "content": "现在知道怎么回事了?[呲牙]",
+    "domains": [
+      "认知"
+    ],
+    "type": "事实陈述/推测预测"
+  },
+  {
+    "id": "processed_data_5-1158",
+    "source_id": "1158",
+    "date": "2025-01-15",
+    "type_origin": "original_post",
+    "source_question": "",
+    "content": "臭老百姓还在[睡]，以后拍大腿[睡]",
+    "domains": [
+      "社会观察"
+    ],
+    "type": "事实陈述/推测预测"
+  },
+  {
+    "id": "processed_data_5-1159",
+    "source_id": "1159",
+    "date": "2025-01-15",
+    "type_origin": "original_post",
+    "source_question": "",
+    "content": "怎么你们都在说什么流感\n为什么哥哥屁事没有，我妈都中招了我跟她在一起吃饭也没事，不会是因为没有那个吧？[睡]",
+    "domains": [
+      "健康"
+    ],
+    "type": "事实陈述/推测预测"
+  },
+  {
+    "id": "processed_data_5-1161",
+    "source_id": "1161",
+    "date": "2025-01-14",
+    "type_origin": "reply",
+    "source_question": "幻幻，可以说说上一条关于信教的事吗？因为第一次看到幻幻谈这方面的事情，非常好奇。谢谢！",
+    "content": "懒得说 ⏰人理解不了这东西 还洋洋得意自以为很聪明 看透了一切 \n知乎上那些理工科郭楠就这样 结果就是毕业出来就挨揍 侥幸高薪的也是35岁裁员 高位买房 被织女爆金币之类的结局[呲牙]",
+    "domains": [
+      "职业",
+      "两性",
+      "投资"
+    ],
+    "type": "方法论"
+  },
+  {
+    "id": "processed_data_5-1162",
+    "source_id": "1162",
+    "date": "2025-01-14",
+    "type_origin": "original_post",
+    "source_question": "",
+    "content": "幸存者偏差罢了，真要去信被骗光了不就炸刚了\n\n果然⏰人一讲到信教就下意识以为要花钱，其实你说的都是⏰特供版宗教[呲牙]",
+    "domains": [
+      "认知"
+    ],
+    "type": "事实陈述/推测预测"
+  },
+  {
+    "id": "processed_data_5-1163",
+    "source_id": "1163",
+    "date": "2025-01-14",
+    "type_origin": "reply",
+    "source_question": "哥哥，说到信教，我感觉⏰你法我笑跟不信教也有关系，经书跟法律都是让人做好事不做坏事。\n但是⏰不管信教还是守法心都是不诚的，只想着捞好处和钻偏门，只有被拴起来才老实",
+    "content": "冷知识 ⏰人搞的教会不能加入[呲牙]",
+    "domains": [
+      "认知"
+    ],
+    "type": "思维方式"
+  },
+  {
+    "id": "processed_data_5-1164",
+    "source_id": "1164",
+    "date": "2025-01-14",
+    "type_origin": "original_post",
+    "source_question": "",
+    "content": "这么聪明的人竟然信教么\n\n⏰人喜欢自作聪明，跟蚂蚁信誓旦旦地说这世界上只有二维空间，没有三维空间其实是一回事\n蚂蚁这么说的时候也会觉得自己很聪明，懂完了\n结果在蚂蚁周围画一个圈，它立马就找不到出去的路了[呲牙]",
+    "domains": [
+      "认知"
+    ],
+    "type": "思维方式"
+  },
+  {
+    "id": "processed_data_5-1165",
+    "source_id": "1165",
+    "date": "2025-01-14",
+    "type_origin": "reply",
+    "source_question": "幻哥，为啥啊，就是说现在机械行业还是低估阶段，到2030年毕业出来进入这个行业的人才能拿高薪工作，到那时机械行业会变天吗",
+    "content": "机械是个大行业 自行车其实也算是机械的一种 你觉得自行车有前途吗\n所以你要知道什么细分行业有前途 哥哥恰好知道几个 等你毕业了就可以收米[睡]",
+    "domains": [
+      "职业",
+      "搞钱"
+    ],
+    "type": "事实陈述/推测预测"
+  },
+  {
+    "id": "processed_data_5-1166",
+    "source_id": "1166",
+    "date": "2025-01-14",
+    "type_origin": "original_post",
+    "source_question": "",
+    "content": "听说现在博士找工作卡本科，双非爬\n这么好耍的吗？[呲牙]",
+    "domains": [
+      "职业",
+      "教育"
+    ],
+    "type": "事实陈述/推测预测"
+  },
+  {
+    "id": "processed_data_5-1167",
+    "source_id": "1167",
+    "date": "2025-01-14",
+    "type_origin": "original_post",
+    "source_question": "",
+    "content": "⏰式兄弟[呲牙]",
+    "domains": [
+      "人际"
+    ],
+    "type": "思维方式"
+  },
+  {
+    "id": "processed_data_5-1168",
+    "source_id": "1168",
+    "date": "2025-01-14",
+    "type_origin": "reply",
+    "source_question": "幻哥，是啥原因呢？",
+    "content": "因为她信教啊\n有一次跟我说的 虽然不知道什么教就是了\n真信教的人能跟普通⏰一样吗? \n⏰整天就知道算计那点三瓜两枣 整天就想着出人头地，不能被别人看不起 什么孝顺父母这个那个的\n她不需要思考这些 一门心思侍奉上帝就行了 随便找个班上 将就过\n所以人家根本瞧不上国内这些烂事的 什么找教职评职称非升即走的 关她屁事\n再加上她是学霸 那些什么书肯定都读完了 书里面怎么说⏰肯定是一清二楚的 当然早就准备三个字了\n咱们普通人还要论证一下为什么要三个字 人家不需要论证 上帝叫她干嘛她就干嘛 很简单[睡]",
+    "domains": [
+      "职业",
+      "人际",
+      "认知"
+    ],
+    "type": "方法论"
+  },
+  {
+    "id": "processed_data_5-1169",
+    "source_id": "1169",
+    "date": "2025-01-14",
+    "type_origin": "original_post",
+    "source_question": "",
+    "content": "前段时间才说过，正确的职业方向[呲牙]",
+    "domains": [
+      "职业",
+      "认知"
+    ],
+    "type": "事实陈述/推测预测"
+  },
+  {
+    "id": "processed_data_5-1170",
+    "source_id": "1170",
+    "date": "2025-01-14",
+    "type_origin": "original_post",
+    "source_question": "",
+    "content": "🇺🇸白👻都这样了？",
+    "domains": [
+      "社会观察"
+    ],
+    "type": "事实陈述/推测预测"
+  },
+  {
+    "id": "processed_data_5-1171",
+    "source_id": "1171",
+    "date": "2025-01-14",
+    "type_origin": "reply",
+    "source_question": "哥为什么农村人结婚热衷于堵门接亲这种游戏 之前还看过屋门撞不开 就从窗户外面跳进去的 有意思在哪里……",
+    "content": "说明以前都是直接抢的 走董志民路线\n现在没办法只能交彩礼了 但是不走这套流程男宝心里就不平衡\n所以怎么说呢，郭楠也是活逼该，罪有应得，咱们只是生错服务器了，不等于别人要干嘛哥哥也要干嘛[呲牙]",
+    "domains": [
+      "两性"
+    ],
+    "type": "事实陈述/推测预测"
+  },
+  {
+    "id": "processed_data_5-1172",
+    "source_id": "1172",
+    "date": "2025-01-14",
+    "type_origin": "original_post",
+    "source_question": "",
+    "content": "川宝在的那几年 \n只有一年是跌的，其他几年都是涨的\n21年2月川宝下台的时候，恰好是最高点\n恋童癖白👴在的这几年，年年都是跌的\n现在，我的川宝终于要回来了[流泪]",
+    "domains": [
+      "投资",
+      "情绪"
+    ],
+    "type": "事实陈述/推测预测"
+  },
+  {
+    "id": "processed_data_5-1173",
+    "source_id": "1173",
+    "date": "2025-01-14",
+    "type_origin": "reply",
+    "source_question": "哥哥这个byd靠谱吗 天天推送 还是学你用🐧通好一点 奥对我记得是不是还得要入住费什么的",
+    "content": "不好用",
+    "domains": [
+      "消费"
+    ],
+    "type": "事实陈述/推测预测"
+  },
+  {
+    "id": "processed_data_5-1174",
+    "source_id": "1174",
+    "date": "2025-01-13",
+    "type_origin": "reply",
+    "source_question": "幻哥，所谓日久生情的本质是什么？跟你之前说的第一眼就看上了的真爱情有联系吗？",
+    "content": "出货困难 将就了",
+    "domains": [
+      "搞钱",
+      "认知"
+    ],
+    "type": "方法论"
+  }
+]
