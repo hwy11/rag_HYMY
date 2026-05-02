@@ -18,6 +18,39 @@ python3 -m hymy_rag ask "我该怎么选择工作？"
 
 最终输出会写入 `clipboard.md`，直接复制到网页大模型即可。
 
+## 检索后端
+
+当前支持两种检索 backend：
+
+- `sparse`：旧版本地 JSON 稀疏检索，零额外模型依赖，适合快速对照和兜底。
+- `vector`：新版 `BGE-M3 dense+sparse + Qdrant + reranker-v2-m3` 混合检索，默认 backend，也是推荐方案。
+
+首次安装向量检索依赖：
+
+```bash
+pip install -e ".[rag]"
+python3 -m hymy_rag build-index --backend vector
+```
+
+如果要强制使用旧版稀疏检索做对比：
+
+```bash
+python3 -m hymy_rag build-index --backend sparse
+python3 -m hymy_rag ask "我该怎么选择工作？" --backend sparse
+```
+
+如果要使用新版向量检索：
+
+```bash
+python3 -m hymy_rag build-index --backend vector
+python3 -m hymy_rag ask "我该怎么选择工作？" --backend vector
+```
+
+两者差异可以粗略理解成：
+
+- `sparse` 更依赖关键词命中，适合问题和回答措辞接近的语料。
+- `vector` 能处理“原回答没有复述问题关键词”的情况，尤其适合 HYMY 这种答法跳跃、靠 trigger 才能理解上下文的语料。
+
 ## 目录
 
 ```text

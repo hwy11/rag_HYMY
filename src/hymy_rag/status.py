@@ -40,6 +40,8 @@ def _index_doc_count(index_path: Path) -> int:
         return 0
     payload = json.loads(index_path.read_text(encoding="utf-8"))
     if isinstance(payload, dict):
+        if isinstance(payload.get("quote_count"), int):
+            return int(payload["quote_count"])
         for key in ("docs", "records", "items"):
             value = payload.get(key)
             if isinstance(value, list):

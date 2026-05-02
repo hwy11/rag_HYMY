@@ -17,7 +17,7 @@ def build_prompt_package(
     output_path: Path,
     current_context: str = "",
     persona_name: str = "meta_thinking.md",
-    max_tokens: int = 3500,
+    max_tokens: int | None = None,
 ) -> str:
     template = template_path.read_text(encoding="utf-8")
     persona = _load_persona(persona_dir, persona_name=persona_name)
@@ -54,7 +54,9 @@ def _format_results(results: list[dict[str, Any]]) -> str:
         if domains:
             meta_parts.append(f"领域:{domains}")
         meta_parts.append(f"类型:{row.get('type', 'unknown')}")
-        meta_parts.append(f"score:{row.get('score', 0)}")
+        if row.get("rerank_score") is not None:
+            meta_parts.append(f"rerank:{row.get('rerank_score', 0)}")
+        meta_parts.append(f"recall:{row.get('score', 0)}")
         meta = " | ".join(meta_parts)
         block = [
             f"## {index}. {meta}",
@@ -73,8 +75,10 @@ def _trim_package(
     persona: str,
     question: str,
     current_context: str,
-    max_tokens: int,
+    max_tokens: int | None,
 ) -> str:
+    if not max_tokens or max_tokens <= 0:
+        return package
     if _estimate_tokens(package) <= max_tokens:
         return package
     trimmed_results = list(results)

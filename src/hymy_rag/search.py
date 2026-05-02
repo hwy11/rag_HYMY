@@ -4,34 +4,93 @@ import json
 import math
 import re
 from collections import Counter
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from .io import read_jsonl
+from .config import RETRIEVAL_BACKEND
+from .io import read_jsonl, write_json
 from .models import TaggedQuote
+from .retrieval.vector_backend import SearchFilters, VectorBackend
 
 
 TOKEN_RE = re.compile(r"[a-zA-Z0-9]+|[\u4e00-\u9fff]")
+_VECTOR_BACKEND: VectorBackend | None = None
 
 
-def build_index(tagged_path: Path, index_path: Path) -> int:
+@dataclass(slots=True)
+class BuildIndexReport:
+    backend: str
+    indexed_count: int
+    quote_count: int
+    point_count: int
+    elapsed_seconds: float = 0.0
+    points_per_second: float = 0.0
+    peak_vram_bytes: int = 0
+    disk_usage_bytes: int = 0
+    device: str = "cpu"
+    collection_name: str | None = None
+
+
+def build_index(tagged_path: Path, index_path: Path, backend: str | None = None) -> BuildIndexReport:
+    selected_backend = (backend or RETRIEVAL_BACKEND).lower()
+    if selected_backend == "sparse":
+        rows = read_jsonl(tagged_path)
+        docs = [TaggedQuote.from_dict(row) for row in rows]
+        doc_tokens = [_tokenize(_search_text(doc)) for doc in docs]
+        doc_freq: Counter[str] = Counter()
+        for tokens in doc_tokens:
+            doc_freq.update(set(tokens))
+        total = max(len(docs), 1)
+        idf = {token: math.log((1 + total) / (1 + freq)) + 1 for token, freq in doc_freq.items()}
+        vectors = [_vectorize(tokens, idf) for tokens in doc_tokens]
+        payload = {
+            "backend": "sparse",
+            "quote_count": len(docs),
+            "point_count": len(docs),
+            "docs": [doc.to_dict() for doc in docs],
+            "idf": idf,
+            "vectors": vectors,
+        }
+        index_path.parent.mkdir(parents=True, exist_ok=True)
+        index_path.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
+        return BuildIndexReport(
+            backend="sparse",
+            indexed_count=len(docs),
+            quote_count=len(docs),
+            point_count=len(docs),
+        )
+    if selected_backend != "vector":
+        raise ValueError(f"Unsupported backend: {selected_backend}")
     rows = read_jsonl(tagged_path)
-    docs = [TaggedQuote.from_dict(row) for row in rows]
-    doc_tokens = [_tokenize(_search_text(doc)) for doc in docs]
-    doc_freq: Counter[str] = Counter()
-    for tokens in doc_tokens:
-        doc_freq.update(set(tokens))
-    total = max(len(docs), 1)
-    idf = {token: math.log((1 + total) / (1 + freq)) + 1 for token, freq in doc_freq.items()}
-    vectors = [_vectorize(tokens, idf) for tokens in doc_tokens]
-    payload = {
-        "docs": [doc.to_dict() for doc in docs],
-        "idf": idf,
-        "vectors": vectors,
-    }
-    index_path.parent.mkdir(parents=True, exist_ok=True)
-    index_path.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
-    return len(docs)
+    vector_report = _get_vector_backend().rebuild_index(rows)
+    write_json(
+        index_path,
+        {
+            "backend": "vector",
+            "quote_count": vector_report.quote_count,
+            "point_count": vector_report.point_count,
+            "collection_name": vector_report.collection_name,
+            "device": vector_report.device,
+            "encode_seconds": round(vector_report.encode_seconds, 4),
+            "total_seconds": round(vector_report.total_seconds, 4),
+            "points_per_second": round(vector_report.points_per_second, 4),
+            "disk_usage_bytes": vector_report.disk_usage_bytes,
+            "peak_vram_bytes": vector_report.peak_vram_bytes,
+        },
+    )
+    return BuildIndexReport(
+        backend="vector",
+        indexed_count=vector_report.point_count,
+        quote_count=vector_report.quote_count,
+        point_count=vector_report.point_count,
+        elapsed_seconds=vector_report.total_seconds,
+        points_per_second=vector_report.points_per_second,
+        peak_vram_bytes=vector_report.peak_vram_bytes,
+        disk_usage_bytes=vector_report.disk_usage_bytes,
+        device=vector_report.device,
+        collection_name=vector_report.collection_name,
+    )
 
 
 def search_index(
@@ -45,7 +104,21 @@ def search_index(
     date_from: str | None = None,
     time_sensitivities: list[str] | None = None,
     preferred_time_sensitivity: str | None = None,
+    backend: str | None = None,
 ) -> list[dict[str, Any]]:
+    selected_backend = (backend or RETRIEVAL_BACKEND).lower()
+    if selected_backend == "vector":
+        return _get_vector_backend().search(
+            query=query,
+            top_k=top_k,
+            filters=SearchFilters(
+                domains=domains or ([] if not domain else [domain]),
+                quote_types=quote_types or ([] if not quote_type else [quote_type]),
+                date_from=date_from,
+                time_sensitivities=time_sensitivities or [],
+            ),
+        )
+
     payload = json.loads(index_path.read_text(encoding="utf-8"))
     idf: dict[str, float] = payload["idf"]
     query_vector = _vectorize(_tokenize(query), idf)
@@ -116,3 +189,10 @@ def _time_sensitivity_bonus(doc: dict[str, Any], preferred: str | None) -> float
     if not preferred:
         return 0.0
     return 0.05 if doc.get("time_sensitivity") == preferred else 0.0
+
+
+def _get_vector_backend() -> VectorBackend:
+    global _VECTOR_BACKEND
+    if _VECTOR_BACKEND is None:
+        _VECTOR_BACKEND = VectorBackend()
+    return _VECTOR_BACKEND

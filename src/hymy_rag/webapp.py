@@ -36,7 +36,7 @@ class GenerateRequest(BaseModel):
     quote_types: list[str] = Field(default_factory=list)
     time_sensitivities: list[str] = Field(default_factory=list)
     top_k: int = 8
-    max_tokens: int = 3500
+    max_tokens: int = 0
 
 
 def create_app() -> FastAPI:
@@ -49,6 +49,7 @@ def create_app() -> FastAPI:
     @app.get("/api/meta")
     def meta() -> dict[str, Any]:
         tagged_rows = read_jsonl(TAGGED)
+        domains = _list_domain_options(DISTILL_DIR)
         domain_counts: Counter[str] = Counter()
         type_counts: Counter[str] = Counter()
         time_counts: Counter[str] = Counter()
@@ -58,7 +59,7 @@ def create_app() -> FastAPI:
             type_counts[str(row.get("type", "unknown"))] += 1
             time_counts[str(row.get("time_sensitivity", "unknown"))] += 1
         return {
-            "domains": sorted(domain_counts),
+            "domains": domains,
             "quote_types": sorted(type_counts),
             "time_sensitivities": sorted(time_counts),
             "domain_counts": dict(domain_counts),
@@ -107,6 +108,7 @@ def create_app() -> FastAPI:
             {
                 "source_id": row.get("source_id", ""),
                 "date": row.get("date", "unknown"),
+                "domains": row.get("domains", []),
                 "type": row.get("type", "unknown"),
                 "time_sensitivity": row.get("time_sensitivity", "unknown"),
                 "score": row.get("score", 0),
@@ -155,6 +157,17 @@ def _save_history(snapshot: dict[str, Any]) -> list[dict[str, Any]]:
     HISTORY_PATH.parent.mkdir(parents=True, exist_ok=True)
     HISTORY_PATH.write_text(json.dumps(history, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return history
+
+
+def _list_domain_options(distill_dir: Path) -> list[str]:
+    if not distill_dir.exists():
+        return []
+    options: list[str] = []
+    for path in sorted(distill_dir.glob("*.md")):
+        if path.stem == "_master":
+            continue
+        options.append(path.stem)
+    return options
 
 
 def _html() -> str:
@@ -563,7 +576,7 @@ def _html() -> str:
         <div class="titleblock">
           <div class="eyebrow">HYMY Local Console</div>
           <h1 class="title">把检索、Persona 和提问包放进同一个工作台。</h1>
-          <div class="sub">这个页面不替你思考，它只负责把你现在的问题、上下文和资料库里最该用的那部分，干净地拼成一份能直接拿去问模型的包。</div>
+          <div class="sub">本地提问台：输入问题和当前情境，选领域，调 top_k，然后一键生成 `clipboard.md` 并直接复制。</div>
         </div>
         <div class="summaryband">
           <div class="metric"><div class="label">Clipboard</div><div class="value">`clipboard.md`</div></div>
@@ -637,7 +650,7 @@ def _html() -> str:
           <section class="panel retrieved">
             <div class="sectiontitle">本次召回</div>
             <div class="quotelist" id="retrieved-list">
-              <div class="empty">生成后会显示每条召回语录的 score、type、date 和摘要。</div>
+              <div class="empty">生成后会显示每条召回语录的日期、领域、score 和正文片段。</div>
             </div>
           </section>
           <section class="panel statuspanel">
@@ -777,10 +790,10 @@ def _html() -> str:
         <div class="quoteitem">
           <div class="quotehead">
             <span>ID ${row.source_id}</span>
-            <span>score ${row.score}</span>
+            <span>${(row.domains || []).join("、") || "未分类"}</span>
             <span>${row.type}</span>
             <span>${row.date}</span>
-            <span>${row.time_sensitivity}</span>
+            <span>score ${row.score}</span>
           </div>
           <div class="quotecontent">${escapeHtml(row.content)}</div>
           ${row.summary ? `<div class="quotesummary">${escapeHtml(row.summary)}</div>` : ""}

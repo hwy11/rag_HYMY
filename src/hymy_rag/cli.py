@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
+from .config import FINAL_TOP_K, RETRIEVAL_BACKEND
 from .cleaning import load_clean_quotes_report
 from .distill import export_domain_corpora, export_master_corpus
 from .io import write_jsonl
@@ -54,14 +55,15 @@ def main() -> None:
     tagged.add_argument("paths", nargs="+", type=Path)
     tagged.add_argument("--force", action="store_true")
 
-    sub.add_parser("build-index")
+    index = sub.add_parser("build-index")
+    index.add_argument("--backend", choices=["sparse", "vector"], default=RETRIEVAL_BACKEND)
 
     persona = sub.add_parser("prepare-persona")
     persona.add_argument("--output-dir", type=Path, default=DISTILL_DIR)
 
     ask = sub.add_parser("ask")
     ask.add_argument("question")
-    ask.add_argument("--top-k", type=int, default=12)
+    ask.add_argument("--top-k", type=int, default=FINAL_TOP_K)
     ask.add_argument("--domains")
     ask.add_argument("--type")
     ask.add_argument("--date-from")
@@ -69,7 +71,8 @@ def main() -> None:
     ask.add_argument("--context", default="")
     ask.add_argument("--output", type=Path, default=ROOT / "clipboard.md")
     ask.add_argument("--persona", default="meta_thinking.md")
-    ask.add_argument("--max-tokens", type=int, default=3500)
+    ask.add_argument("--max-tokens", type=int, default=0)
+    ask.add_argument("--backend", choices=["sparse", "vector"], default=RETRIEVAL_BACKEND)
 
     sub.add_parser("status")
 
@@ -160,8 +163,21 @@ def main() -> None:
             raise SystemExit(str(exc))
         print(f"已导入 {result.count} 条打标语录，扫描 {result.files_found} 个文件，写入 {TAGGED}")
     elif args.command == "build-index":
-        count = build_index(TAGGED, INDEX)
-        print(f"已构建 {count} 条语录的本地索引")
+        report = build_index(TAGGED, INDEX, backend=args.backend)
+        if report.backend == "vector":
+            print(
+                f"已构建 vector 索引\n"
+                f"- device: {report.device}\n"
+                f"- collection: {report.collection_name}\n"
+                f"- quotes: {report.quote_count}\n"
+                f"- points: {report.point_count}\n"
+                f"- total_seconds: {round(report.elapsed_seconds, 2)}\n"
+                f"- points_per_second: {round(report.points_per_second, 2)}\n"
+                f"- peak_vram_bytes: {report.peak_vram_bytes}\n"
+                f"- disk_usage_bytes: {report.disk_usage_bytes}"
+            )
+        else:
+            print(f"已构建 {report.indexed_count} 条语录的 sparse 本地索引")
     elif args.command == "prepare-persona":
         domain_count = export_domain_corpora(TAGGED, args.output_dir)
         master_count = export_master_corpus(TAGGED, args.output_dir / "_master.md")
@@ -176,7 +192,9 @@ def main() -> None:
             quote_type=args.type,
             date_from=args.date_from,
             preferred_time_sensitivity=args.prefer_time_sensitivity,
+            backend=args.backend,
         )
+        _print_results(results)
         try:
             package = build_prompt_package(
                 question=args.question,
@@ -226,6 +244,27 @@ def _init() -> None:
     ]:
         path.mkdir(parents=True, exist_ok=True)
     print("项目目录已就绪")
+
+
+def _print_results(results: list[dict[str, object]]) -> None:
+    if not results:
+        print("未召回到结果。")
+        return
+    print("召回结果：")
+    for index, row in enumerate(results, 1):
+        domains = "、".join(row.get("domains") or []) if isinstance(row.get("domains"), list) else ""
+        rerank_score = row.get("rerank_score")
+        trigger = str(row.get("trigger") or row.get("source_question") or "").replace("\n", " ").strip()
+        content = str(row.get("content") or "").replace("\n", " ").strip()
+        print(
+            f"{index}. {row.get('source_id', row.get('id', ''))} | {row.get('date', 'unknown')} | "
+            f"{domains or '-'} | {row.get('type', 'unknown')} | "
+            f"recall={row.get('score', 0)} | "
+            f"rerank={rerank_score if rerank_score is not None else '-'}"
+        )
+        print(f"   content: {content[:80]}")
+        if trigger:
+            print(f"   trigger: {trigger[:80]}")
 
 
 if __name__ == "__main__":

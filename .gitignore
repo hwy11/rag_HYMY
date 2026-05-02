@@ -26,3 +26,13 @@ hymy/final_output_*.md
 hymy/merged_output_*.md
 hymy/processed_data_*.json
 hymy/enriched_data_sample.json
+data/qdrant_db/
+models/
+src/*.egg-info/
+pip_install_rag.log
+stage1_cuda_check.txt
+stage3_build_vector.log
+stage4_build_sparse.log
+stage4_sparse_*.txt
+stage4_vector_*.txt
+data/web_history.json
