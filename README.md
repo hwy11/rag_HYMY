@@ -46,6 +46,8 @@ python3 -m hymy_rag build-index --backend vector
 python3 -m hymy_rag ask "我该怎么选择工作？" --backend vector
 ```
 
+Mac 上当前也可以直接运行 `vector` backend。程序会自动按 `cuda > mps > cpu` 选择设备；如果是 Apple Silicon，默认会优先使用 `mps`，并把默认编码 batch 调低到更稳的 `8`，避免一上来就把显存打满。需要更激进或更保守时，可以手动设置 `HYMY_ENCODE_BATCH_SIZE`。
+
 两者差异可以粗略理解成：
 
 - `sparse` 更依赖关键词命中，适合问题和回答措辞接近的语料。

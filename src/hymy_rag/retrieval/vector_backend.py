@@ -117,7 +117,7 @@ class VectorBackend:
             "[vector] build summary "
             f"collection={self.collection_name} points={point_count} "
             f"encode={encode_seconds:.2f}s total={total_seconds:.2f}s "
-            f"speed={points_per_second:.2f} points/s peak_vram={_format_bytes(peak_vram_bytes)} "
+            f"speed={points_per_second:.2f} points/s peak_accel_mem={_format_bytes(peak_vram_bytes)} "
             f"disk={_format_bytes(disk_usage_bytes)}"
         )
         return VectorBuildReport(
@@ -353,7 +353,7 @@ class VectorBackend:
             print(
                 f"[vector] embedder ready cache={self.hf_cache_dir} "
                 f"model_size={_format_bytes(_model_cache_size(model_source, self.hf_cache_dir))} "
-                f"vram={_format_bytes(torch.cuda.memory_allocated() if torch.cuda.is_available() else 0)}"
+                f"accel_mem={_format_bytes(_accelerator_memory_allocated())}"
             )
         return self._embedder
 
@@ -372,7 +372,7 @@ class VectorBackend:
             print(
                 f"[vector] reranker ready cache={self.hf_cache_dir} "
                 f"model_size={_format_bytes(_model_cache_size(model_source, self.hf_cache_dir))} "
-                f"vram={_format_bytes(torch.cuda.memory_allocated() if torch.cuda.is_available() else 0)}"
+                f"accel_mem={_format_bytes(_accelerator_memory_allocated())}"
             )
         return self._reranker
 
@@ -430,6 +430,18 @@ def _model_cache_size(model_name: Path | str, cache_dir: Path) -> int:
         return _directory_size(model_path)
     hub_dir = cache_dir / "hub" / f"models--{model_name.replace('/', '--')}"
     return _directory_size(hub_dir)
+
+
+def _accelerator_memory_allocated() -> int:
+    if torch.cuda.is_available():
+        return int(torch.cuda.memory_allocated())
+    mps = getattr(torch, "mps", None)
+    if mps is not None and hasattr(mps, "current_allocated_memory"):
+        try:
+            return int(mps.current_allocated_memory())
+        except RuntimeError:
+            return 0
+    return 0
 
 
 def _directory_size(path: Path) -> int:

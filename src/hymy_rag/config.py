@@ -19,13 +19,30 @@ RECALL_TOP_K = int(os.getenv("HYMY_RECALL_TOP_K", "30"))
 FINAL_TOP_K = int(os.getenv("HYMY_FINAL_TOP_K", "8"))
 DENSE_WEIGHT = float(os.getenv("HYMY_DENSE_WEIGHT", "0.7"))
 SPARSE_WEIGHT = float(os.getenv("HYMY_SPARSE_WEIGHT", "0.3"))
-ENCODE_BATCH_SIZE = int(os.getenv("HYMY_ENCODE_BATCH_SIZE", "32"))
 COLLECTION_NAME = "hymy_quotes"
 HF_CACHE_DIR = Path.home() / ".cache" / "huggingface"
 HF_ENDPOINT = os.getenv("HF_ENDPOINT", "https://hf-mirror.com")
 LOCAL_MODEL_ROOT = ROOT / "models"
 
-if torch is not None and torch.cuda.is_available():
-    DEVICE = "cuda"
-else:
-    DEVICE = "cpu"
+
+def _detect_device() -> str:
+    if torch is None:
+        return "cpu"
+    if torch.cuda.is_available():
+        return "cuda"
+    mps = getattr(torch.backends, "mps", None)
+    if mps is not None and mps.is_available():
+        return "mps"
+    return "cpu"
+
+
+def _default_batch_size(device: str) -> int:
+    if device == "cuda":
+        return 32
+    if device == "mps":
+        return 8
+    return 8
+
+
+DEVICE = _detect_device()
+ENCODE_BATCH_SIZE = int(os.getenv("HYMY_ENCODE_BATCH_SIZE", str(_default_batch_size(DEVICE))))
