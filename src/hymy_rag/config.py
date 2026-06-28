@@ -19,6 +19,10 @@ RECALL_TOP_K = int(os.getenv("HYMY_RECALL_TOP_K", "30"))
 FINAL_TOP_K = int(os.getenv("HYMY_FINAL_TOP_K", "8"))
 DENSE_WEIGHT = float(os.getenv("HYMY_DENSE_WEIGHT", "0.7"))
 SPARSE_WEIGHT = float(os.getenv("HYMY_SPARSE_WEIGHT", "0.3"))
+# 问答检索：原问题 7，原问题+回答 3；无原问题的原创帖在召回/精排阶段额外加权。
+TRIGGER_FIELD_WEIGHT = float(os.getenv("HYMY_TRIGGER_FIELD_WEIGHT", "0.7"))
+TRIGGER_CONTENT_FIELD_WEIGHT = float(os.getenv("HYMY_TRIGGER_CONTENT_FIELD_WEIGHT", "0.3"))
+ORIGINAL_POST_BOOST = float(os.getenv("HYMY_ORIGINAL_POST_BOOST", "1.25"))
 COLLECTION_NAME = "hymy_quotes"
 HF_CACHE_DIR = Path.home() / ".cache" / "huggingface"
 HF_ENDPOINT = os.getenv("HF_ENDPOINT", "https://hf-mirror.com")

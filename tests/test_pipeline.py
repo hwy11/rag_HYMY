@@ -74,6 +74,52 @@ class PipelineTest(unittest.TestCase):
             self.assertEqual(len(quotes), 1)
             self.assertEqual(quotes[0].source_id, "2")
 
+    def test_import_tagged_merge_keeps_existing_and_adds_new(self) -> None:
+        with tempfile.TemporaryDirectory() as dirname:
+            tmp_path = Path(dirname)
+            tagged_path = tmp_path / "tagged.jsonl"
+            tagged_path.write_text(
+                json.dumps(
+                    {
+                        "id": "old-1",
+                        "source_id": "1",
+                        "date": "2025-01-01",
+                        "type_origin": "reply",
+                        "source_question": "旧问题",
+                        "content": "旧回答",
+                        "domains": ["职业"],
+                        "type": "方法论",
+                    },
+                    ensure_ascii=False,
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            new_file = tmp_path / "new_tagged.json"
+            new_file.write_text(
+                json.dumps(
+                    [
+                        {
+                            "id": "new-1",
+                            "source_id": "2",
+                            "date": "2025-02-01",
+                            "type_origin": "reply",
+                            "source_question": "新问题",
+                            "content": "新回答",
+                            "domains": ["投资"],
+                            "type": "方法论",
+                        }
+                    ],
+                    ensure_ascii=False,
+                ),
+                encoding="utf-8",
+            )
+            result = import_tagged([new_file], tagged_path, merge=True)
+            self.assertEqual(result.count, 2)
+            self.assertEqual(result.added_count, 1)
+            rows = [json.loads(line) for line in tagged_path.read_text(encoding="utf-8").splitlines() if line.strip()]
+            self.assertEqual({row["id"] for row in rows}, {"old-1", "new-1"})
+
     def test_search_pipeline(self) -> None:
         with tempfile.TemporaryDirectory() as dirname:
             tmp_path = Path(dirname)

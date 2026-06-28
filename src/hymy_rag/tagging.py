@@ -9,7 +9,7 @@ from datetime import datetime
 from pathlib import Path
 from urllib import error, request
 
-from .io import read_json, read_jsonl, write_json, write_jsonl
+from .io import merge_jsonl_by_id, read_json, read_jsonl, write_json, write_jsonl
 from .models import TaggedQuote
 
 ACTIVE_BATCH_MANIFEST = "active_batches.json"
@@ -39,6 +39,8 @@ class RemoteTaggingError(RuntimeError):
 class TaggedImportResult:
     count: int
     files_found: int
+    added_count: int = 0
+    updated_count: int = 0
 
 
 @dataclass
@@ -127,11 +129,16 @@ def make_batches(
     }
 
 
-def import_tagged(paths: list[Path], output_path: Path, force: bool = False) -> TaggedImportResult:
+def import_tagged(
+    paths: list[Path],
+    output_path: Path,
+    force: bool = False,
+    merge: bool = False,
+) -> TaggedImportResult:
     resolved_paths = _expand_json_paths(paths)
     if not resolved_paths:
         raise TaggedImportError("未找到任何打标文件，请检查路径")
-    tagged: list[TaggedQuote] = []
+    incoming: list[TaggedQuote] = []
     seen: set[str] = set()
     for path in resolved_paths:
         data = read_json(path)
@@ -143,11 +150,26 @@ def import_tagged(paths: list[Path], output_path: Path, force: bool = False) -> 
             if key in seen:
                 continue
             seen.add(key)
-            tagged.append(quote)
-    if not tagged and not force:
+            incoming.append(quote)
+    if not incoming and not force:
         raise TaggedImportError("导入结果为 0 条，已拒绝覆盖已有 quotes_tagged.jsonl；如需强制覆盖，请加 --force")
-    write_jsonl(output_path, [quote.to_dict() for quote in tagged])
-    return TaggedImportResult(count=len(tagged), files_found=len(resolved_paths))
+
+    existing_ids = {str(row.get("id")) for row in read_jsonl(output_path)} if merge else set()
+    incoming_rows = [quote.to_dict() for quote in incoming]
+    if merge:
+        merged_rows = merge_jsonl_by_id(output_path, incoming_rows)
+        added_count = sum(1 for row in incoming_rows if str(row.get("id")) not in existing_ids)
+        updated_count = len(incoming_rows) - added_count
+        write_jsonl(output_path, merged_rows)
+        return TaggedImportResult(
+            count=len(merged_rows),
+            files_found=len(resolved_paths),
+            added_count=added_count,
+            updated_count=updated_count,
+        )
+
+    write_jsonl(output_path, incoming_rows)
+    return TaggedImportResult(count=len(incoming_rows), files_found=len(resolved_paths))
 
 
 def run_tagging(

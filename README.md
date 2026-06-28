@@ -113,6 +113,64 @@ python3 -m hymy_rag status
 
 `prompts/distill_domain_prompt.md` 和 `prompts/distill_master_prompt.md` 是你手动蒸馏时参考的提示词，不会自动替你生成 persona。
 
+## 追加新语料（增量更新）
+
+后面又爬下来一批新 JSON，**不用每次全量重建索引**。按下面顺序走，只会处理新增部分。
+
+**第一步：清洗并合并进已有语料**
+
+把新文件放进 `data/raw/`，用 `--append` 合并进 `data/processed/quotes_clean.jsonl`（按语录 `id` 去重，同 id 以新数据为准）：
+
+```bash
+python3 -m hymy_rag ingest data/raw/新批次.json --append
+```
+
+**第二步：只给新语录生成打标批次**
+
+`--skip-existing` 会跳过已经打标过的 id：
+
+```bash
+python3 -m hymy_rag make-tag-batches --skip-existing
+```
+
+把 `data/tagging_batches/` 里新生成的批次发给模型打标，结果放进 `data/tagged/`。
+
+**第三步：合并打标结果**
+
+用 `--merge` 把新打标结果并入 `data/processed/quotes_tagged.jsonl`：
+
+```bash
+python3 -m hymy_rag import-tagged data/tagged/新批次_tagged.json --merge
+```
+
+**第四步：增量写入向量库**
+
+只编码尚未入库的新语录，往 Qdrant 里追加，不删除旧向量：
+
+```bash
+python3 -m hymy_rag build-index --backend vector --incremental
+```
+
+（可选）如果也想更新按领域整理的 Markdown 档案：
+
+```bash
+python3 -m hymy_rag prepare-persona
+```
+
+**什么时候还要全量 `build-index`？**
+
+下面这些情况不要用 `--incremental`，直接全量重建：
+
+- 换了 embedding / reranker 模型
+- 改过检索建库策略（例如 trigger 权重、索引字段）
+- 怀疑索引和语料不一致，想从头对齐一遍
+
+```bash
+python3 -m hymy_rag build-index --backend vector
+```
+
+**注意：** 增量依赖稳定的语录 `id`（默认是 `文件名-原始id`）。同 id 重复导入会覆盖旧记录，不会无限堆重复项。第一次启用增量前，如果索引是很早以前建的，建议先全量 `build-index` 一次，再开始用 `--incremental`。
+
 ## 两条路径
 
 路径 A（RAG）：`data/distill/*.md` 是按领域整理的原话档案，提问时可以按领域过滤检索相关原话。

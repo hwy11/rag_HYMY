@@ -39,3 +39,20 @@ def write_jsonl(path: Path, rows: Iterable[dict[str, Any]]) -> None:
             file.write(json.dumps(row, ensure_ascii=False))
             file.write("\n")
     temp_path.replace(path)
+
+
+def merge_jsonl_by_id(
+    existing_path: Path,
+    new_rows: Iterable[dict[str, Any]],
+    id_field: str = "id",
+) -> list[dict[str, Any]]:
+    """按 id 合并 jsonl：新数据覆盖同 id 旧记录，用于增量 ingest / import-tagged。"""
+    merged: dict[str, dict[str, Any]] = {
+        str(row[id_field]): row for row in read_jsonl(existing_path) if row.get(id_field)
+    }
+    for row in new_rows:
+        key = str(row.get(id_field) or "").strip()
+        if not key:
+            continue
+        merged[key] = row
+    return list(merged.values())

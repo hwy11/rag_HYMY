@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from datetime import date
 from pathlib import Path
 from typing import Any
 
@@ -26,8 +25,7 @@ def build_prompt_package(
         persona=persona,
         retrieved_quotes=retrieved,
         question=question,
-        current_date=date.today().isoformat(),
-        current_context=current_context.strip() or "暂无补充上下文。",
+        context_block=_format_context_block(current_context),
     )
     package = _trim_package(package, results, template, persona, question, current_context, max_tokens)
     output_path.write_text(package, encoding="utf-8")
@@ -52,8 +50,8 @@ def _format_results(results: list[dict[str, Any]]) -> str:
         domains = "、".join(row.get("domains") or [])
         meta_parts = [row.get("date", "unknown")]
         if domains:
-            meta_parts.append(f"领域:{domains}")
-        meta_parts.append(f"类型:{row.get('type', 'unknown')}")
+            meta_parts.append(domains)
+        meta_parts.append(str(row.get("type", "unknown")))
         if row.get("rerank_score") is not None:
             meta_parts.append(f"rerank:{row.get('rerank_score', 0)}")
         meta_parts.append(f"recall:{row.get('score', 0)}")
@@ -89,8 +87,7 @@ def _trim_package(
             persona=trimmed_persona,
             retrieved_quotes=_format_results(trimmed_results),
             question=question,
-            current_date=date.today().isoformat(),
-            current_context=current_context.strip() or "暂无补充上下文。",
+            context_block=_format_context_block(current_context),
         )
         if _estimate_tokens(candidate) <= max_tokens:
             return candidate
@@ -100,8 +97,7 @@ def _trim_package(
             persona=trimmed_persona,
             retrieved_quotes="检索结果过长，已全部截断。请缩小问题范围或调低 top-k。",
             question=question,
-            current_date=date.today().isoformat(),
-            current_context=current_context.strip() or "暂无补充上下文。",
+            context_block=_format_context_block(current_context),
         )
         if _estimate_tokens(candidate) <= max_tokens:
             return candidate
@@ -109,8 +105,7 @@ def _trim_package(
         persona=trimmed_persona,
         retrieved_quotes="检索结果过长，已全部截断。请缩小问题范围或调低 top-k。",
         question=question,
-        current_date=date.today().isoformat(),
-        current_context=current_context.strip() or "暂无补充上下文。",
+        context_block=_format_context_block(current_context),
     )
     if _estimate_tokens(fallback) <= max_tokens:
         return fallback
@@ -119,10 +114,16 @@ def _trim_package(
         persona=minimal_persona,
         retrieved_quotes="检索结果过长，已全部截断。请缩小问题范围或调低 top-k。",
         question=question,
-        current_date=date.today().isoformat(),
-        current_context=current_context.strip() or "暂无补充上下文。",
+        context_block=_format_context_block(current_context),
     )
 
 
 def _estimate_tokens(text: str) -> int:
     return max(1, len(text) // 2)
+
+
+def _format_context_block(current_context: str) -> str:
+    context = current_context.strip()
+    if not context:
+        return ""
+    return f"\n\n---\n\n# 当下处境\n\n{context}"

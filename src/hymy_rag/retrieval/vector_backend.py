@@ -25,9 +25,12 @@ from ..config import (
     HF_CACHE_DIR,
     HF_ENDPOINT,
     LOCAL_MODEL_ROOT,
+    ORIGINAL_POST_BOOST,
     RECALL_TOP_K,
     RERANKER_MODEL,
     SPARSE_WEIGHT,
+    TRIGGER_CONTENT_FIELD_WEIGHT,
+    TRIGGER_FIELD_WEIGHT,
     VECTOR_DB_PATH,
 )
 
@@ -132,6 +135,69 @@ class VectorBackend:
             collection_name=self.collection_name,
         )
 
+    def append_index(self, rows: list[dict[str, Any]]) -> VectorBuildReport:
+        """增量写入：只编码并 upsert 新语录，不删除已有 Qdrant collection。"""
+        started = time.perf_counter()
+        if not rows:
+            return VectorBuildReport(
+                quote_count=0,
+                point_count=0,
+                encode_seconds=0.0,
+                total_seconds=0.0,
+                points_per_second=0.0,
+                disk_usage_bytes=_directory_size(self.db_path),
+                peak_vram_bytes=0,
+                device=self.device,
+                collection_name=self.collection_name,
+            )
+
+        points_to_encode = self._prepare_points(rows)
+        quote_count = len(rows)
+        point_count = len(points_to_encode)
+        self.db_path.mkdir(parents=True, exist_ok=True)
+        client = self._client_or_create()
+
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+            torch.cuda.reset_peak_memory_stats()
+
+        print(f"[vector] append device={self.device} new_quotes={quote_count} new_points={point_count}")
+        encode_started = time.perf_counter()
+        encoded_points = self._encode_points(points_to_encode)
+        encode_seconds = time.perf_counter() - encode_started
+        vector_size = len(encoded_points[0]["dense"])
+        if not client.collection_exists(self.collection_name):
+            client.create_collection(
+                collection_name=self.collection_name,
+                vectors_config={
+                    "dense": models.VectorParams(size=vector_size, distance=models.Distance.COSINE)
+                },
+                sparse_vectors_config={"sparse": models.SparseVectorParams()},
+            )
+        self._upsert_points(encoded_points)
+        total_seconds = time.perf_counter() - started
+        disk_usage_bytes = _directory_size(self.db_path)
+        peak_vram_bytes = torch.cuda.max_memory_allocated() if torch.cuda.is_available() else 0
+        points_per_second = point_count / encode_seconds if encode_seconds else 0.0
+        print(
+            "[vector] append summary "
+            f"collection={self.collection_name} new_points={point_count} "
+            f"encode={encode_seconds:.2f}s total={total_seconds:.2f}s "
+            f"speed={points_per_second:.2f} points/s peak_accel_mem={_format_bytes(peak_vram_bytes)} "
+            f"disk={_format_bytes(disk_usage_bytes)}"
+        )
+        return VectorBuildReport(
+            quote_count=quote_count,
+            point_count=point_count,
+            encode_seconds=encode_seconds,
+            total_seconds=total_seconds,
+            points_per_second=points_per_second,
+            disk_usage_bytes=disk_usage_bytes,
+            peak_vram_bytes=peak_vram_bytes,
+            device=self.device,
+            collection_name=self.collection_name,
+        )
+
     def search(
         self,
         query: str,
@@ -159,14 +225,13 @@ class VectorBackend:
             ).points
 
         fused = self._fuse_hits(dense_hits, sparse_hits)
-        deduped = self._dedupe_by_quote(fused)[: max(self.recall_top_k, top_k)]
-        reranked = self._rerank(query, deduped)
-        filtered = [row for row in reranked if _matches_filters(row, filters)]
-        return filtered[:top_k]
+        deduped = self._dedupe_by_quote(fused)
+        filtered = [row for row in deduped if _matches_filters(row, filters)]
+        reranked = self._rerank(query, filtered[: max(self.recall_top_k, top_k)])
+        return reranked[:top_k]
 
     def _prepare_points(self, rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
         prepared: list[dict[str, Any]] = []
-        next_point_id = 1
         for row in rows:
             content = str(row.get("content") or "").strip()
             if not content:
@@ -177,27 +242,43 @@ class VectorBackend:
             payload["quote_id"] = quote_id
             payload["trigger"] = trigger
             payload["source_question"] = str(row.get("source_question") or trigger)
-            prepared.append(
-                {
-                    "id": next_point_id,
-                    "text": content,
-                    "payload": {**payload, "field": "content", "point_key": f"{quote_id}::content"},
-                }
-            )
-            next_point_id += 1
             if trigger:
+                # 问答：只索引「原问题」和「原问题+回答」，不再单独索引博主回答。
+                trigger_key = f"{quote_id}::trigger"
                 prepared.append(
                     {
-                        "id": next_point_id,
+                        "id": _point_id_from_key(trigger_key),
+                        "text": trigger,
+                        "payload": {**payload, "field": "trigger", "point_key": trigger_key},
+                    }
+                )
+                trigger_content_key = f"{quote_id}::trigger_content"
+                prepared.append(
+                    {
+                        "id": _point_id_from_key(trigger_content_key),
                         "text": f"{trigger} [SEP] {content}",
                         "payload": {
                             **payload,
                             "field": "trigger_content",
-                            "point_key": f"{quote_id}::trigger_content",
+                            "point_key": trigger_content_key,
                         },
                     }
                 )
-                next_point_id += 1
+                continue
+            # 原创帖：只有正文，检索时额外加权。
+            content_key = f"{quote_id}::content"
+            prepared.append(
+                {
+                    "id": _point_id_from_key(content_key),
+                    "text": content,
+                    "payload": {
+                        **payload,
+                        "field": "content",
+                        "is_original_post": True,
+                        "point_key": content_key,
+                    },
+                }
+            )
         return prepared
 
     def _encode_points(self, points_to_encode: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -300,13 +381,27 @@ class VectorBackend:
         return fused_rows[: max(self.recall_top_k, self.final_top_k)]
 
     def _dedupe_by_quote(self, fused_rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
-        deduped: dict[str, dict[str, Any]] = {}
+        representatives: dict[str, dict[str, Any]] = {}
+        field_scores: dict[str, dict[str, float]] = {}
         for row in fused_rows:
-            quote_id = str(row.get("quote_id") or row.get("id") or row.get("source_id") or "")
-            current = deduped.get(quote_id)
-            if current is None or row["recall_score"] > current["recall_score"]:
-                deduped[quote_id] = row
-        rows = list(deduped.values())
+            quote_id = _row_quote_id(row)
+            if not quote_id:
+                continue
+            field = str(row.get("field") or "content")
+            per_field = field_scores.setdefault(quote_id, {})
+            per_field[field] = max(per_field.get(field, 0.0), float(row.get("recall_score") or 0.0))
+            current = representatives.get(quote_id)
+            if current is None or _field_priority(field) > _field_priority(str(current.get("field") or "")):
+                representatives[quote_id] = row
+
+        rows: list[dict[str, Any]] = []
+        for quote_id, scores in field_scores.items():
+            representative = representatives.get(quote_id)
+            if representative is None:
+                continue
+            row = dict(representative)
+            row["recall_score"] = round(_combine_quote_recall_scores(scores), 4)
+            rows.append(row)
         rows.sort(key=lambda row: row["recall_score"], reverse=True)
         return rows
 
@@ -314,17 +409,44 @@ class VectorBackend:
         if not candidates:
             return []
         reranker = self._reranker_or_create()
-        pairs = [(query, str(row.get("content") or "")) for row in candidates]
-        rerank_scores = reranker.compute_score(pairs)
-        if not isinstance(rerank_scores, list):
-            rerank_scores = [rerank_scores]
+        pairs: list[tuple[str, str]] = []
+        pair_plan: list[tuple[int, str]] = []
+        for index, row in enumerate(candidates):
+            trigger, content = _quote_trigger_and_content(row)
+            if trigger:
+                pairs.append((query, trigger))
+                pairs.append((query, f"{trigger} [SEP] {content}"))
+                pair_plan.append((index, "qa"))
+                continue
+            pairs.append((query, content))
+            pair_plan.append((index, "original"))
+
+        raw_scores = reranker.compute_score(pairs)
+        if not isinstance(raw_scores, list):
+            raw_scores = [raw_scores]
+
+        final_scores: dict[int, float] = {}
+        cursor = 0
+        for index, mode in pair_plan:
+            if mode == "qa":
+                trigger_score = float(raw_scores[cursor])
+                trigger_content_score = float(raw_scores[cursor + 1])
+                cursor += 2
+                final_scores[index] = (
+                    TRIGGER_FIELD_WEIGHT * trigger_score
+                    + TRIGGER_CONTENT_FIELD_WEIGHT * trigger_content_score
+                )
+                continue
+            final_scores[index] = float(raw_scores[cursor]) * ORIGINAL_POST_BOOST
+            cursor += 1
+
         reranked: list[dict[str, Any]] = []
-        for row, score in zip(candidates, rerank_scores):
+        for index, row in enumerate(candidates):
             reranked.append(
                 {
                     **row,
                     "score": round(float(row["recall_score"]), 4),
-                    "rerank_score": round(float(score), 4),
+                    "rerank_score": round(final_scores[index], 4),
                 }
             )
         reranked.sort(key=lambda row: row["rerank_score"], reverse=True)
@@ -391,6 +513,42 @@ class VectorBackend:
         if local_path.exists():
             return local_path
         return model_name
+
+
+def _point_id_from_key(point_key: str) -> int:
+    # 用 point_key 生成稳定整数 id，增量 upsert 时同一条语录会覆盖旧向量。
+    digest = hashlib.blake2b(point_key.encode("utf-8"), digest_size=8).digest()
+    return int.from_bytes(digest, "little", signed=False) & ((1 << 63) - 1)
+
+
+def _row_quote_id(row: dict[str, Any]) -> str:
+    quote_id = str(row.get("quote_id") or "").strip()
+    if quote_id:
+        return quote_id
+    return str(row.get("source_id") or row.get("id") or "").strip()
+
+
+def _field_priority(field: str) -> int:
+    order = {"trigger": 3, "trigger_content": 2, "content": 1}
+    return order.get(field, 0)
+
+
+def _quote_trigger_and_content(row: dict[str, Any]) -> tuple[str, str]:
+    trigger = str(row.get("trigger") or row.get("source_question") or "").strip()
+    content = str(row.get("content") or "").strip()
+    return trigger, content
+
+
+def _combine_quote_recall_scores(field_scores: dict[str, float]) -> float:
+    trigger_score = field_scores.get("trigger", 0.0)
+    trigger_content_score = field_scores.get("trigger_content", 0.0)
+    if trigger_score or trigger_content_score:
+        return (
+            TRIGGER_FIELD_WEIGHT * trigger_score
+            + TRIGGER_CONTENT_FIELD_WEIGHT * trigger_content_score
+        )
+    content_score = field_scores.get("content", 0.0)
+    return content_score * ORIGINAL_POST_BOOST
 
 
 def _normalize_scores(points: list[models.ScoredPoint]) -> dict[str, float]:

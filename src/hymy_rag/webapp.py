@@ -35,7 +35,7 @@ class GenerateRequest(BaseModel):
     domains: list[str] = Field(default_factory=list)
     quote_types: list[str] = Field(default_factory=list)
     time_sensitivities: list[str] = Field(default_factory=list)
-    top_k: int = 8
+    top_k: int = 30
     max_tokens: int = 0
 
 
@@ -82,7 +82,7 @@ def create_app() -> FastAPI:
             raise HTTPException(status_code=400, detail="本地索引不存在，请先运行 build-index")
         if not PACKAGE_TEMPLATE.exists():
             raise HTTPException(status_code=400, detail="package 模板不存在，请检查 prompts/package_template.md")
-        normalized_top_k = min(max(request.top_k, 5), 20)
+        normalized_top_k = min(max(request.top_k, 5), 50)
         preferred_time = request.time_sensitivities[0] if len(request.time_sensitivities) == 1 else None
         results = search_index(
             INDEX,
@@ -275,6 +275,7 @@ def _html() -> str:
       display: grid;
       grid-template-columns: minmax(340px, 0.9fr) minmax(460px, 1.1fr);
       gap: 20px;
+      align-items: start;
     }
     .panel {
       background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.01));
@@ -286,6 +287,9 @@ def _html() -> str:
       padding: 20px;
       display: grid;
       gap: 18px;
+      align-content: start;
+      max-height: calc(100vh - 140px);
+      overflow: auto;
     }
     .sectiontitle {
       font-size: 13px;
@@ -380,10 +384,14 @@ def _html() -> str:
       color: var(--muted);
       font-size: 13px;
     }
+    .pillnote.success {
+      color: var(--accent-2);
+    }
     .results {
       display: grid;
       grid-template-rows: auto 1fr;
       min-height: 760px;
+      height: calc(100vh - 140px);
     }
     .resulthead {
       padding: 18px 20px;
@@ -565,6 +573,7 @@ def _html() -> str:
       .mast, .workspace, .lower { grid-template-columns: 1fr; }
       .dashboard { grid-template-columns: 1fr; }
       .summaryband { grid-template-columns: 1fr; }
+      .controls, .results { max-height: none; height: auto; }
       .results { min-height: 560px; }
     }
   </style>
@@ -615,8 +624,8 @@ def _html() -> str:
           <div class="sliderrow">
             <div class="sectiontitle">检索规模</div>
             <div class="sliderbar">
-              <input id="top-k" type="range" min="5" max="20" step="1" value="8">
-              <div id="top-k-value">8</div>
+              <input id="top-k" type="range" min="5" max="50" step="1" value="30">
+              <div id="top-k-value">30</div>
             </div>
           </div>
           <div class="btnrow">
@@ -702,8 +711,30 @@ def _html() -> str:
     const copyBtn = document.getElementById("copy-btn");
     const clearBtn = document.getElementById("clear-btn");
     const hint = document.getElementById("hint");
+    let hintTimer = null;
 
     topK.addEventListener("input", () => { topKValue.textContent = topK.value; });
+
+    function setHint(message, tone = "normal", persist = false) {
+      hint.textContent = message;
+      hint.classList.remove("danger", "success");
+      if (tone === "danger") {
+        hint.classList.add("danger");
+      } else if (tone === "success") {
+        hint.classList.add("success");
+      }
+      if (hintTimer) {
+        clearTimeout(hintTimer);
+        hintTimer = null;
+      }
+      if (!persist && tone === "success") {
+        hintTimer = setTimeout(() => {
+          hint.textContent = "默认会同步写入 `clipboard.md`。";
+          hint.classList.remove("danger", "success");
+          hintTimer = null;
+        }, 1800);
+      }
+    }
 
     function checkedValues(containerId) {
       return [...document.querySelectorAll(`#${containerId} input:checked`)].map((el) => el.value);
@@ -833,12 +864,10 @@ def _html() -> str:
         top_k: Number(topK.value),
       };
       if (!payload.question) {
-        hint.textContent = "问题不能为空。";
-        hint.classList.add("danger");
+        setHint("问题不能为空。", "danger", true);
         return;
       }
-      hint.textContent = "正在生成...";
-      hint.classList.remove("danger");
+      setHint("正在生成...", "normal", true);
       const res = await fetch("/api/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -846,8 +875,7 @@ def _html() -> str:
       });
       const data = await res.json();
       if (!res.ok) {
-        hint.textContent = data.detail || "生成失败。";
-        hint.classList.add("danger");
+        setHint(data.detail || "生成失败。", "danger", true);
         return;
       }
       markdownOutput.innerHTML = marked.parse(data.markdown);
@@ -855,27 +883,34 @@ def _html() -> str:
       clipboardPath.textContent = data.clipboard_path;
       renderRetrieved(data.retrieved || []);
       renderHistory(data.history || []);
-      hint.textContent = "生成完成，结果已经同步写入 clipboard.md。";
-      hint.classList.remove("danger");
+      setHint("生成完成，结果已经同步写入 clipboard.md。");
       window.latestMarkdown = data.markdown;
     });
 
     copyBtn.addEventListener("click", async () => {
       const text = window.latestMarkdown || markdownOutput.innerText || "";
-      await navigator.clipboard.writeText(text);
-      hint.textContent = "已复制到剪贴板。";
-      hint.classList.remove("danger");
+      if (!text) {
+        setHint("还没有可复制的内容。", "danger", true);
+        return;
+      }
+      try {
+        await navigator.clipboard.writeText(text);
+        setHint("复制成功。", "success");
+      } catch (error) {
+        setHint("复制失败，请检查浏览器剪贴板权限。", "danger", true);
+      }
     });
 
     clearBtn.addEventListener("click", () => {
       questionInput.value = "";
       contextInput.value = "";
       personaInput.value = "meta_thinking.md";
-      topK.value = 8;
+      topK.value = 30;
       topK.dispatchEvent(new Event("input"));
       setChecked("domain-filters", []);
       setChecked("type-filters", []);
       setChecked("time-filters", []);
+      setHint("默认会同步写入 `clipboard.md`。", "normal", true);
     });
 
     loadMeta();

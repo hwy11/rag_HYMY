@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import Any
 
 from .config import RETRIEVAL_BACKEND
-from .io import read_jsonl, write_json
+from .io import read_json, read_jsonl, write_json
 from .models import TaggedQuote
 from .retrieval.vector_backend import SearchFilters, VectorBackend
 
@@ -30,9 +30,16 @@ class BuildIndexReport:
     disk_usage_bytes: int = 0
     device: str = "cpu"
     collection_name: str | None = None
+    added_quote_count: int = 0
+    added_point_count: int = 0
 
 
-def build_index(tagged_path: Path, index_path: Path, backend: str | None = None) -> BuildIndexReport:
+def build_index(
+    tagged_path: Path,
+    index_path: Path,
+    backend: str | None = None,
+    incremental: bool = False,
+) -> BuildIndexReport:
     selected_backend = (backend or RETRIEVAL_BACKEND).lower()
     if selected_backend == "sparse":
         rows = read_jsonl(tagged_path)
@@ -63,13 +70,44 @@ def build_index(tagged_path: Path, index_path: Path, backend: str | None = None)
     if selected_backend != "vector":
         raise ValueError(f"Unsupported backend: {selected_backend}")
     rows = read_jsonl(tagged_path)
-    vector_report = _get_vector_backend().rebuild_index(rows)
+    indexed_quote_ids = _load_indexed_quote_ids(index_path) if incremental else set()
+    rows_to_index = (
+        [row for row in rows if str(row.get("id") or "") not in indexed_quote_ids]
+        if incremental
+        else rows
+    )
+    if incremental and not rows_to_index:
+        meta = read_json(index_path) if index_path.exists() else {}
+        return BuildIndexReport(
+            backend="vector",
+            indexed_count=int(meta.get("point_count") or 0),
+            quote_count=len(rows),
+            point_count=int(meta.get("point_count") or 0),
+            device=str(meta.get("device") or "cpu"),
+            collection_name=meta.get("collection_name"),
+            added_quote_count=0,
+            added_point_count=0,
+        )
+
+    vector_backend = _get_vector_backend()
+    previous_meta = read_json(index_path) if incremental and index_path.exists() else {}
+    previous_point_count = int(previous_meta.get("point_count") or 0)
+    if incremental:
+        vector_report = vector_backend.append_index(rows_to_index)
+        all_quote_ids = sorted(indexed_quote_ids | {str(row.get("id") or "") for row in rows_to_index if row.get("id")})
+        total_points = previous_point_count + vector_report.point_count
+    else:
+        vector_report = vector_backend.rebuild_index(rows)
+        all_quote_ids = sorted(str(row.get("id") or "") for row in rows if row.get("id"))
+        total_points = vector_report.point_count
+
     write_json(
         index_path,
         {
             "backend": "vector",
-            "quote_count": vector_report.quote_count,
-            "point_count": vector_report.point_count,
+            "quote_count": len(rows),
+            "point_count": total_points,
+            "indexed_quote_ids": all_quote_ids,
             "collection_name": vector_report.collection_name,
             "device": vector_report.device,
             "encode_seconds": round(vector_report.encode_seconds, 4),
@@ -81,15 +119,17 @@ def build_index(tagged_path: Path, index_path: Path, backend: str | None = None)
     )
     return BuildIndexReport(
         backend="vector",
-        indexed_count=vector_report.point_count,
-        quote_count=vector_report.quote_count,
-        point_count=vector_report.point_count,
+        indexed_count=total_points,
+        quote_count=len(rows),
+        point_count=total_points,
         elapsed_seconds=vector_report.total_seconds,
         points_per_second=vector_report.points_per_second,
         peak_vram_bytes=vector_report.peak_vram_bytes,
         disk_usage_bytes=vector_report.disk_usage_bytes,
         device=vector_report.device,
         collection_name=vector_report.collection_name,
+        added_quote_count=len(rows_to_index) if incremental else len(rows),
+        added_point_count=vector_report.point_count if incremental else vector_report.point_count,
     )
 
 
@@ -189,6 +229,13 @@ def _time_sensitivity_bonus(doc: dict[str, Any], preferred: str | None) -> float
     if not preferred:
         return 0.0
     return 0.05 if doc.get("time_sensitivity") == preferred else 0.0
+
+
+def _load_indexed_quote_ids(index_path: Path) -> set[str]:
+    if not index_path.exists():
+        return set()
+    payload = read_json(index_path)
+    return {str(item) for item in payload.get("indexed_quote_ids", []) if str(item).strip()}
 
 
 def _get_vector_backend() -> VectorBackend:

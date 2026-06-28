@@ -6,7 +6,7 @@ from pathlib import Path
 from .config import FINAL_TOP_K, RETRIEVAL_BACKEND
 from .cleaning import load_clean_quotes_report
 from .distill import export_domain_corpora, export_master_corpus
-from .io import write_jsonl
+from .io import merge_jsonl_by_id, write_jsonl
 from .package import PersonaPromptMissingError, build_prompt_package
 from .search import build_index, search_index
 from .slang import write_slang_candidates
@@ -39,6 +39,7 @@ def main() -> None:
     ingest.add_argument("--keep-empty-answer", action="store_true")
     ingest.add_argument("--dedup-threshold", type=float, default=0.92)
     ingest.add_argument("--filter-level", choices=["strict", "loose", "none"], default="strict")
+    ingest.add_argument("--append", action="store_true", help="合并进已有 quotes_clean.jsonl，而不是覆盖")
 
     batches = sub.add_parser("make-tag-batches")
     batches.add_argument("--batch-size", type=int, default=20)
@@ -54,9 +55,11 @@ def main() -> None:
     tagged = sub.add_parser("import-tagged")
     tagged.add_argument("paths", nargs="+", type=Path)
     tagged.add_argument("--force", action="store_true")
+    tagged.add_argument("--merge", action="store_true", help="与已有 quotes_tagged.jsonl 按 id 合并")
 
     index = sub.add_parser("build-index")
     index.add_argument("--backend", choices=["sparse", "vector"], default=RETRIEVAL_BACKEND)
+    index.add_argument("--incremental", action="store_true", help="只索引尚未入库的新语录")
 
     persona = sub.add_parser("prepare-persona")
     persona.add_argument("--output-dir", type=Path, default=DISTILL_DIR)
@@ -105,11 +108,17 @@ def main() -> None:
             print("去重统计：")
             for reason, count in sorted(report.dedup_counts.items()):
                 print(f"- {reason}: {count}")
-        write_jsonl(PROCESSED, [quote.to_dict() for quote in report.quotes])
+        write_jsonl(
+            PROCESSED,
+            merge_jsonl_by_id(PROCESSED, [quote.to_dict() for quote in report.quotes])
+            if args.append
+            else [quote.to_dict() for quote in report.quotes],
+        )
+        action = "合并写入" if args.append else "写入"
         print(
             f"共处理 {report.total_files} 个文件，成功 {report.successful_files}，跳过 {len(report.skipped_files)}\n"
             f"原始记录 {report.raw_rows} 条\n"
-            f"已清洗 {len(report.quotes)} 条，写入 {PROCESSED}"
+            f"已清洗 {len(report.quotes)} 条，{action} {PROCESSED}"
         )
     elif args.command == "make-tag-batches":
         summary = make_batches(
@@ -158,19 +167,29 @@ def main() -> None:
             print("失败批次：" + ", ".join(summary.failed_batches))
     elif args.command == "import-tagged":
         try:
-            result = import_tagged(args.paths, TAGGED, force=args.force)
+            result = import_tagged(args.paths, TAGGED, force=args.force, merge=args.merge)
         except TaggedImportError as exc:
             raise SystemExit(str(exc))
-        print(f"已导入 {result.count} 条打标语录，扫描 {result.files_found} 个文件，写入 {TAGGED}")
-    elif args.command == "build-index":
-        report = build_index(TAGGED, INDEX, backend=args.backend)
-        if report.backend == "vector":
+        if args.merge:
             print(
-                f"已构建 vector 索引\n"
+                f"已合并打标语录：总计 {result.count} 条，"
+                f"本次新增 {result.added_count} 条，更新 {result.updated_count} 条，"
+                f"扫描 {result.files_found} 个文件，写入 {TAGGED}"
+            )
+        else:
+            print(f"已导入 {result.count} 条打标语录，扫描 {result.files_found} 个文件，写入 {TAGGED}")
+    elif args.command == "build-index":
+        report = build_index(TAGGED, INDEX, backend=args.backend, incremental=args.incremental)
+        if report.backend == "vector":
+            mode = "增量追加" if args.incremental else "全量重建"
+            print(
+                f"已{mode} vector 索引\n"
                 f"- device: {report.device}\n"
                 f"- collection: {report.collection_name}\n"
                 f"- quotes: {report.quote_count}\n"
                 f"- points: {report.point_count}\n"
+                f"- added_quotes: {report.added_quote_count}\n"
+                f"- added_points: {report.added_point_count}\n"
                 f"- total_seconds: {round(report.elapsed_seconds, 2)}\n"
                 f"- points_per_second: {round(report.points_per_second, 2)}\n"
                 f"- peak_vram_bytes: {report.peak_vram_bytes}\n"
